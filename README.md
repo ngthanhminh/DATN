@@ -50,8 +50,8 @@ Thông tin kết nối:
 
 - Host: localhost
 - Port: 3306
-- Database: nestjs
-- Username: ml-intern
+- Database: datn
+- Username: nguyenminh
 - Password: password
 
 # Cài đặt node packages:
