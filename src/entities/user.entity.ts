@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Department } from './department.entity';
 
 @Entity({
   name: 'users',
@@ -15,23 +17,52 @@ export class User {
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'first_name',
+    name: 'name',
   })
-  firstName: string;
+  name: string;
 
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'last_name',
+    name: 'username',
+    unique: true,
   })
-  lastName: string;
+  username: string;
 
   @Column({
-    type: 'tinyint',
-    name: 'is_active',
-    default: 1,
+    type: 'varchar',
+    length: 255,
+    name: 'password',
   })
-  isActive: boolean;
+  password: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'role',
+  })
+  role: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'email',
+  })
+  email: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'address',
+  })
+  address: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'phone_number',
+  })
+  phone_number: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -42,4 +73,7 @@ export class User {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @OneToMany(type => Department, (department) => department.user)
+  departments: Department[];
 }
