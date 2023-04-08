@@ -14,6 +14,7 @@ import {
 import { User } from './user.entity';
 import { Subnet } from './subnet.entity';
 import { Device } from './device.entity';
+import { Gateway } from './gateway.entity';
 
 @Entity({
   name: 'departments',
@@ -42,6 +43,12 @@ export class Department {
   })
   user_id: number;
 
+  @Column({
+    type: 'int',
+    name: 'gateway_id',
+  })
+  gateway_id: number;
+
   @CreateDateColumn({
     name: 'created_at',
   })
@@ -64,8 +71,14 @@ export class Department {
   user: User;
 
   @OneToMany(type => VLAN, (vlan) => vlan.department)
-  vlan: VLAN;
+  vlan: VLAN[];
 
-  @OneToMany(type => Device, (device) => device.department)
-  device: Device;
+  @OneToMany(type => Subnet, (subnet) => subnet.department)
+  subnet: Subnet[];
+
+  @OneToMany(type => Gateway, (gateway) => gateway.department)
+  @JoinColumn({
+    name: "gateway_id",
+  })
+  gateway: Gateway;
 }

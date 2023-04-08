@@ -49,13 +49,8 @@ export class subnet1679908366697 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
-                        name: "vlan_id",
+                        name: "department_id",
                         type: "int",
-                    },
-                    {
-                        name: "ISP_id",
-                        type: "int",
-                        isUnique: true,
                     },
                 ]
             }),
@@ -65,19 +60,9 @@ export class subnet1679908366697 implements MigrationInterface {
         await queryRunner.createForeignKey(
             "subnets",
             new TableForeignKey({
-                columnNames: ["vlan_id"],
+                columnNames: ["department_id"],
                 referencedColumnNames: ["id"],
-                referencedTableName: "vlans",
-                onDelete: "CASCADE",
-            }),
-        )
-
-        await queryRunner.createForeignKey(
-            "subnets",
-            new TableForeignKey({
-                columnNames: ["ISP_id"],
-                referencedColumnNames: ["id"],
-                referencedTableName: "ISP",
+                referencedTableName: "departments",
                 onDelete: "CASCADE",
             }),
         )

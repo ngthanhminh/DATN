@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { VLAN } from './vlan.entity';
+import { Department } from './department.entity';
 
 @Entity({
   name: 'gateways',
@@ -32,6 +33,13 @@ export class Gateway {
   })
   decription: string;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'IPS_name',
+  })
+  IPS_name: string;
+
   @CreateDateColumn({
     name: 'created_at',
   })
@@ -47,7 +55,7 @@ export class Gateway {
   })
   deleted_at?: Date;
 
-  @OneToMany(type => VLAN, (vlan) => vlan.gateway)
-  vlan: VLAN[];
+  @OneToMany(type => Department, (department) => department.gateway)
+  department: Department[];
 
 }

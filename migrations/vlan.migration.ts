@@ -57,10 +57,6 @@ export class vlan1679908365697 implements MigrationInterface {
                     {
                         name: "department_id",
                         type: "int",
-                    },
-                    {
-                        name: "gateway_id",
-                        type: "int",
                     }
                 ]
             }),
@@ -73,16 +69,6 @@ export class vlan1679908365697 implements MigrationInterface {
                 columnNames: ["department_id"],
                 referencedColumnNames: ["id"],
                 referencedTableName: "departments",
-                onDelete: "CASCADE",
-            }),
-        )
-
-        await queryRunner.createForeignKey(
-            "vlans",
-            new TableForeignKey({
-                columnNames: ["gateway_id"],
-                referencedColumnNames: ["id"],
-                referencedTableName: "gateways",
                 onDelete: "CASCADE",
             }),
         )

@@ -11,7 +11,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Subnet } from './subnet.entity';
-import { IPAddress } from './ipAddress.entity';
+import { VLAN } from './vlan.entity';
 
 @Entity({
   name: 'devices',
@@ -77,9 +77,9 @@ export class Device {
 
   @Column({
     type: 'int',
-    name: 'department_id',
+    name: 'vlan_id',
   })
-  department_id: number;
+  vlan_id: number;
 
 
   @CreateDateColumn({
@@ -103,13 +103,10 @@ export class Device {
   })
   subnet: Subnet;
 
-  @ManyToOne(type => Department, (department) => department.device)
+  @ManyToOne(type => VLAN, (vlan) => vlan.device)
   @JoinColumn({
-    name: 'department_id',
+    name: 'vlan_id',
   })
-  department: Department;
-
-  @OneToMany((type => IPAddress), (ipAddress) => ipAddress.device)
-  ipAddress: IPAddress;
+  vlan: VLAN;
 
 }

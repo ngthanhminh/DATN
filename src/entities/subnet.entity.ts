@@ -1,5 +1,4 @@
 import { Gateway } from './gateway.entity';
-import { ISP } from './isp.entity';
 import { Department } from './department.entity';
 import { VLAN } from './vlan.entity';
 import { Device } from './device.entity';
@@ -45,16 +44,9 @@ export class Subnet {
 
   @Column({
     type: 'int',
-    name: 'vlan_id',
+    name: 'department_id',
   })
-  vlan_id: number;
-
-
-  @Column({
-    type: 'int',
-    name: 'ISP_id',
-  })
-  ISP_id: number;
+  department_id: number;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -74,16 +66,10 @@ export class Subnet {
   @OneToMany(type => Device, (device) => device.subnet)
   device: Device[];
 
-  @OneToOne(type => VLAN, (vlan) => vlan.subnet)
+  @ManyToOne(type => Department, (department) => department.subnet)
   @JoinColumn({
-    name: 'vlan_id',
+    name: "department_id"
   })
-  vlan: VLAN;
-
-  @OneToOne(type => ISP, (isp) => isp.subnet)
-  @JoinColumn({
-    name: 'ISP_id',
-  })
-  isp: ISP;
+  department: Department;
 
 }

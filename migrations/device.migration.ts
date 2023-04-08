@@ -61,7 +61,7 @@ export class device1679908366897 implements MigrationInterface {
                         type: "int",
                     },
                     {
-                        name: "department_id",
+                        name: "VLAN_id",
                         type: "int",
                     }
                 ]
@@ -82,9 +82,9 @@ export class device1679908366897 implements MigrationInterface {
         await queryRunner.createForeignKey(
             "devices",
             new TableForeignKey({
-                columnNames: ["department_id"],
+                columnNames: ["VLAN_id"],
                 referencedColumnNames: ["id"],
-                referencedTableName: "departments",
+                referencedTableName: "vlans",
                 onDelete: "CASCADE",
             }),
         )

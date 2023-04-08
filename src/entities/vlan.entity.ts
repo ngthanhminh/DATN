@@ -9,9 +9,11 @@ import {
   JoinColumn,
   OneToOne,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Subnet } from './subnet.entity';
 import { Gateway } from './gateway.entity';
+import { Device } from './device.entity';
 
 @Entity({
   name: 'vlans',
@@ -74,18 +76,13 @@ export class VLAN {
   })
   deleted_at?: Date;
 
-  @ManyToOne(type => Department, (department => department.vlan))
+  @ManyToOne(type => Department, (department) => department.vlan)
   @JoinColumn({
     name: 'department_id',
   })
   department: Department;
 
-  @OneToOne(type => Subnet, (subnet => subnet.vlan))
-  subnet: Subnet;
+  @OneToMany(type => Device, (device) => device.vlan)
+  device: Device[];
 
-  @ManyToOne(type => Gateway, (gateway) => gateway.vlan)
-  @JoinColumn({
-    name: 'gateway_id',
-  })
-  gateway: Gateway;
 }

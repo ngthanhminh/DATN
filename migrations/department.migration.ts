@@ -47,6 +47,10 @@ export class department1679908365696 implements MigrationInterface {
                         name: "user_id",
                         type: "int",
                     },
+                    {
+                        name: "gateway_id",
+                        type: "int",
+                    },
                 ]
             }),
             true,
@@ -58,6 +62,16 @@ export class department1679908365696 implements MigrationInterface {
                 columnNames: ["user_id"],
                 referencedColumnNames: ["id"],
                 referencedTableName: "users",
+                onDelete: "CASCADE",
+            }),
+        )
+
+        await queryRunner.createForeignKey(
+            "departments",
+            new TableForeignKey({
+                columnNames: ["gateway_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "gateways",
                 onDelete: "CASCADE",
             }),
         )
