@@ -3,6 +3,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
   OneToMany,
 } from 'typeorm';
 import { Department } from './department.entity';
@@ -53,11 +55,17 @@ export class User {
   @CreateDateColumn({
     name: 'created_at',
   })
-  createdAt: Date;
+  created_at: Date;
 
-  @CreateDateColumn({
+  @UpdateDateColumn({
     name: 'updated_at',
   })
-  updatedAt: Date;
+  updated_at: Date;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+  })
+  deleted_at?: Date;
+
 
 }

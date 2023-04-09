@@ -33,12 +33,6 @@ export class VLAN {
   })
   tag: string;
 
-  @Column({
-    type: 'int',
-    name: 'subnet_id',
-  })
-  department_id: number;
-
   @CreateDateColumn({
     name: 'created_at',
   })

@@ -4,7 +4,9 @@ import {
      Matches,
      IsOptional,
      IsNumberString,
+     IsEnum,
 } from 'class-validator';
+import { RoleUser } from 'src/enums/roleUser.enum';
 
 export class CreateUserDto {
      @IsNotEmpty()
@@ -20,18 +22,11 @@ export class CreateUserDto {
      password: string;
 
      @IsNotEmpty()
-     role: string;
-
-     @IsString()
-     @IsOptional()
-     email: string;
+     @IsEnum(RoleUser)
+     role: RoleUser;
 
      @IsString()
      @IsOptional()
      address: string;
-
-     @IsString()
-     @IsOptional()
-     phone_number: string;
 
 }

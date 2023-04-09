@@ -1,8 +1,10 @@
 import {
+     IsEnum,
      IsOptional,
 } from 'class-validator';
 import { CreateUserDto } from './createUser.dto';
 import { Exclude } from 'class-transformer';
+import { RoleUser } from 'src/enums/roleUser.enum';
 
 export class UpdateUserDto extends CreateUserDto {
      @IsOptional()
@@ -16,6 +18,5 @@ export class UpdateUserDto extends CreateUserDto {
      password: string;
 
      @IsOptional()
-     role: string;
-
+     role: RoleUser;
 }

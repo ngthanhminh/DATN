@@ -44,10 +44,6 @@ export class vlan1679908365697 implements MigrationInterface {
                         // default: "now()",
                         isNullable: true,
                     },
-                    {
-                        name: "department_id",
-                        type: "int",
-                    }
                 ]
             }),
             true,

@@ -6,13 +6,16 @@ import {
      IsOptional,
      IsNumberString,
 } from 'class-validator';
+import { CreateVlanDto } from './createVlan.dto';
 
-export class CreateVlanDto {
-     @IsNotEmpty()
-     @Matches(/^[a-zA-Z0-9_\s]{3,30}$/)
+export class UpdateVlanDto extends CreateVlanDto {
+     @IsOptional()
      name: string;
 
-     @IsNotEmpty()
+     @IsOptional()
      tag: string;
+
+     @IsOptional()
+     department_id: number;
 
 }

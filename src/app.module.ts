@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 import { UserModule } from './modules/users/user.module';
 import { Network } from './entities/network.entity';
 import { Connection } from './entities/connection.entity';
+import { VlanModule } from './modules/vlans/vlan.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Connection } from './entities/connection.entity';
       entities: [User, Department, Device, Subnet, VLAN, Network, Connection],
     }),
     UserModule,
+    VlanModule,
   ],
   controllers: [AppController],
   providers: [AppService],
