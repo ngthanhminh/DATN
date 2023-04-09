@@ -37,17 +37,7 @@ export class user1679908365496 implements MigrationInterface {
                         type: "varchar",
                     },
                     {
-                        name: "email",
-                        type: "varchar",
-                        isNullable: true,
-                    },
-                    {
                         name: "address",
-                        type: "varchar",
-                        isNullable: true,
-                    },
-                    {
-                        name: "phone_number",
                         type: "varchar",
                         isNullable: true,
                     },

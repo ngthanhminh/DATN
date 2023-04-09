@@ -1,7 +1,3 @@
-import { Gateway } from './gateway.entity';
-import { Department } from './department.entity';
-import { VLAN } from './vlan.entity';
-import { Device } from './device.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -14,6 +10,9 @@ import {
   JoinColumn,
   OneToOne,
 } from 'typeorm';
+import { Network } from './network.entity';
+import { Connection } from './connection.entity';
+import { VLAN } from './vlan.entity';
 
 @Entity({
   name: 'subnets',
@@ -21,6 +20,13 @@ import {
 export class Subnet {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'name',
+  })
+  name: string;
 
   @Column({
     type: 'varchar',
@@ -37,16 +43,16 @@ export class Subnet {
   permission: string;
 
   @Column({
-    type: 'varchar',
-    name: 'name',
+    type: 'int',
+    name: 'network_id',
   })
-  name: number;
+  network_id: number;
 
   @Column({
     type: 'int',
-    name: 'department_id',
+    name: 'vlan_id',
   })
-  department_id: number;
+  vlan_id: number;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -63,13 +69,19 @@ export class Subnet {
   })
   deleted_at?: Date;
 
-  @OneToMany(type => Device, (device) => device.subnet)
-  device: Device[];
+  @OneToMany(type => Connection, (connection) => connection.subnet)
+  connections: Connection[];
 
-  @ManyToOne(type => Department, (department) => department.subnet)
+  @ManyToOne(type => Network, (network) => network.subnets)
   @JoinColumn({
-    name: "department_id"
+    name: "network_id"
   })
-  department: Department;
+  network: Network;
+
+  @ManyToOne(type => VLAN, (vlan) => vlan.subnets)
+  @JoinColumn({
+    name: "vlan_id"
+  })
+  vlan: VLAN;
 
 }

@@ -5,12 +5,12 @@ import {
     TableForeignKey,
 } from "typeorm";
 
-export class gateway1679907792038 implements MigrationInterface {
+export class networkt1679908365697 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "gateways",
+                name: "networks",
                 columns: [
                     {
                         name: "id",
@@ -20,9 +20,21 @@ export class gateway1679907792038 implements MigrationInterface {
                         generationStrategy: 'increment',
                     },
                     {
-                        name: "address",
+                        name: "name",
+                        type: "varchar",
+                    },
+                    {
+                        name: "ip_address",
                         type: "varchar",
                         isUnique: true,
+                    },
+                    {
+                        name: "subnet_mask",
+                        type: "varchar",
+                    },
+                    {
+                        name: "gateway",
+                        type: "varchar",
                     },
                     {
                         name: "decription",
@@ -44,9 +56,23 @@ export class gateway1679907792038 implements MigrationInterface {
                         // default: "now()",
                         isNullable: true,
                     },
+                    {
+                        name: "department_id",
+                        type: "int",
+                    }
                 ]
             }),
             true,
+        )
+
+        await queryRunner.createForeignKey(
+            "networks",
+            new TableForeignKey({
+                columnNames: ["department_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "departments",
+                onDelete: "CASCADE",
+            }),
         )
     }
 

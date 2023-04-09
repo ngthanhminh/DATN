@@ -5,12 +5,12 @@ import {
     TableForeignKey,
 } from "typeorm";
 
-export class device1679908366897 implements MigrationInterface {
+export class connection1679908366898 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "devices",
+                name: "connections",
                 columns: [
                     {
                         name: "id",
@@ -20,25 +20,12 @@ export class device1679908366897 implements MigrationInterface {
                         generationStrategy: 'increment',
                     },
                     {
-                        name: "name",
-                        type: "nvarchar",
-                    },
-                    {
-                        name: "ip_address",
+                        name: "device_id",
                         type: "int",
                     },
                     {
-                        name: "mac_address",
+                        name: "subnet_id",
                         type: "int",
-                    },
-                    {
-                        name: "status",
-                        type: "varchar",
-                    },
-                    {
-                        name: "decription",
-                        type: "varchar",
-                        isNullable: true,
                     },
                     {
                         name: "created_at",
@@ -56,29 +43,35 @@ export class device1679908366897 implements MigrationInterface {
                         // default: "now()",
                         isNullable: true,
                     },
-                    {
-                        name: "department_id",
-                        type: "int",
-                    },
                 ]
             }),
             true,
         )
 
         await queryRunner.createForeignKey(
-            "devices",
+            "connections",
             new TableForeignKey({
-                columnNames: ["department_id"],
+                columnNames: ["subnet_id"],
                 referencedColumnNames: ["id"],
-                referencedTableName: "departments",
+                referencedTableName: "subnets",
+                onDelete: "CASCADE",
+            }),
+        )
+
+        await queryRunner.createForeignKey(
+            "connections",
+            new TableForeignKey({
+                columnNames: ["device_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "devices",
                 onDelete: "CASCADE",
             }),
         )
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.clearTable('devices');
-        await queryRunner.dropTable('devices', true, true);
+        await queryRunner.clearTable('subnets');
+        await queryRunner.dropTable('subnets', true, true);
     }
 
 }

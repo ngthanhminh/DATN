@@ -24,16 +24,6 @@ export class vlan1679908365697 implements MigrationInterface {
                         type: "nvarchar",
                     },
                     {
-                        name: "code",
-                        type: "int",
-                        isUnique: true,
-                    },
-                    {
-                        name: "description",
-                        type: "varchar",
-                        isNullable: true,
-                    },
-                    {
                         name: "tag",
                         type: "varchar",
                         isUnique: true,
@@ -61,16 +51,6 @@ export class vlan1679908365697 implements MigrationInterface {
                 ]
             }),
             true,
-        )
-
-        await queryRunner.createForeignKey(
-            "vlans",
-            new TableForeignKey({
-                columnNames: ["department_id"],
-                referencedColumnNames: ["id"],
-                referencedTableName: "departments",
-                onDelete: "CASCADE",
-            }),
         )
     }
 

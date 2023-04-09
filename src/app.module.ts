@@ -9,7 +9,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './entities/user.entity';
 import { UserModule } from './modules/users/user.module';
-import { Gateway } from './entities/gateway.entity';
+import { Network } from './entities/network.entity';
+import { Connection } from './entities/connection.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { Gateway } from './entities/gateway.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Department, Device, Subnet, VLAN, Gateway],
+      entities: [User, Department, Device, Subnet, VLAN, Network, Connection],
     }),
     UserModule,
   ],

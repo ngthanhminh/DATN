@@ -1,4 +1,3 @@
-import { Department } from './department.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -10,8 +9,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Subnet } from './subnet.entity';
-import { VLAN } from './vlan.entity';
+import { Department } from './department.entity';
+import { Connection } from './connection.entity';
 
 @Entity({
   name: 'devices',
@@ -37,30 +36,9 @@ export class Device {
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'location',
+    name: 'status',
   })
-  location: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    name: 'type',
-  })
-  type: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    name: 'model',
-  })
-  model: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    name: 'version',
-  })
-  version: string;
+  status: string;
 
   @Column({
     type: 'varchar',
@@ -71,15 +49,15 @@ export class Device {
 
   @Column({
     type: 'int',
-    name: 'subnet_id',
+    name: 'mac_address',
   })
-  subnet_id: number;
+  mac_address: number;
 
   @Column({
     type: 'int',
-    name: 'vlan_id',
+    name: 'department_id',
   })
-  vlan_id: number;
+  department_id: number;
 
 
   @CreateDateColumn({
@@ -97,16 +75,13 @@ export class Device {
   })
   deleted_at?: Date;
 
-  @ManyToOne(type => Subnet, (subnet) => subnet.device)
+  @ManyToOne(type => Department, (department) => department.devices)
   @JoinColumn({
-    name: 'subnet_id',
+    name: 'department_id',
   })
-  subnet: Subnet;
+  department: Department;
 
-  @ManyToOne(type => VLAN, (vlan) => vlan.device)
-  @JoinColumn({
-    name: 'vlan_id',
-  })
-  vlan: VLAN;
+  @OneToMany(type => Connection, (connection) => connection.device)
+  connections: Connection[];
 
 }

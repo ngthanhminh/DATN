@@ -12,8 +12,6 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Subnet } from './subnet.entity';
-import { Gateway } from './gateway.entity';
-import { Device } from './device.entity';
 
 @Entity({
   name: 'vlans',
@@ -24,22 +22,9 @@ export class VLAN {
 
   @Column({
     type: 'varchar',
-    length: 255,
     name: 'name',
   })
   name: string;
-
-  @Column({
-    type: 'int',
-    name: 'code',
-  })
-  code: number;
-
-  @Column({
-    type: 'varchar',
-    name: 'decription',
-  })
-  decription: string;
 
 
   @Column({
@@ -50,16 +35,9 @@ export class VLAN {
 
   @Column({
     type: 'int',
-    name: 'department_id',
+    name: 'subnet_id',
   })
   department_id: number;
-
-
-  @Column({
-    type: 'int',
-    name: 'gateway_id',
-  })
-  gateway_id: number;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -76,13 +54,10 @@ export class VLAN {
   })
   deleted_at?: Date;
 
-  @ManyToOne(type => Department, (department) => department.vlan)
+  @OneToMany(type => Subnet, (subnet) => subnet.vlan)
   @JoinColumn({
-    name: 'department_id',
+    name: 'subnet_id',
   })
-  department: Department;
-
-  @OneToMany(type => Device, (device) => device.vlan)
-  device: Device[];
+  subnets: Subnet[];
 
 }

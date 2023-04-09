@@ -1,4 +1,3 @@
-import { Subnet } from './subnet.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,39 +5,48 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
+  JoinColumn,
   OneToOne,
   OneToMany,
 } from 'typeorm';
-import { VLAN } from './vlan.entity';
+import { Subnet } from './subnet.entity';
 import { Department } from './department.entity';
 
 @Entity({
-  name: 'gateways',
+  name: 'networks',
 })
-export class Gateway {
+export class Network {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'address',
+    name: 'name',
   })
-  address: string;
+  name: string;
 
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'decription',
+    name: 'ip_address',
   })
-  decription: string;
+  ip_address: string;
 
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'IPS_name',
+    name: 'subnet_mask',
   })
-  IPS_name: string;
+  subnet_mask: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'gateway',
+  })
+  gateway: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -50,12 +58,22 @@ export class Gateway {
   })
   updated_at: Date;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'decription',
+  })
+  decription: string;
+
   @DeleteDateColumn({
     name: 'deleted_at',
   })
   deleted_at?: Date;
 
-  @OneToMany(type => Department, (department) => department.gateway)
-  department: Department[];
+  @ManyToOne(type => Department, (department) => department.networks)
+  department: Department;
+
+  @OneToMany(type => Subnet, (subnet) => subnet.network)
+  subnets: Subnet[];
 
 }
