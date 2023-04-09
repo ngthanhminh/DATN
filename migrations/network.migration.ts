@@ -59,6 +59,7 @@ export class networkt1679908365697 implements MigrationInterface {
                     {
                         name: "department_id",
                         type: "int",
+                        isNullable: true,
                     }
                 ]
             }),

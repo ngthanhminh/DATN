@@ -10,8 +10,11 @@ import { AppService } from './app.service';
 import { User } from './entities/user.entity';
 import { UserModule } from './modules/users/user.module';
 import { Network } from './entities/network.entity';
-import { Connection } from './entities/connection.entity';
 import { VlanModule } from './modules/vlans/vlan.module';
+import { DeviceModule } from './modules/devices/device.module';
+import { DepartmentModule } from './modules/departments/department.module';
+import { NetworkModule } from './modules/networks/network.module';
+import { SubnetModule } from './modules/subnets/subnet.module';
 
 @Module({
   imports: [
@@ -23,10 +26,14 @@ import { VlanModule } from './modules/vlans/vlan.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Department, Device, Subnet, VLAN, Network, Connection],
+      entities: [User, Department, Device, Subnet, VLAN, Network],
     }),
     UserModule,
     VlanModule,
+    DeviceModule,
+    DepartmentModule,
+    NetworkModule,
+    SubnetModule,
   ],
   controllers: [AppController],
   providers: [AppService],
