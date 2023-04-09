@@ -11,8 +11,8 @@ import {
   OneToOne,
 } from 'typeorm';
 import { Network } from './network.entity';
-import { Connection } from './connection.entity';
 import { VLAN } from './vlan.entity';
+import { Device } from './device.entity';
 
 @Entity({
   name: 'subnets',
@@ -69,8 +69,8 @@ export class Subnet {
   })
   deleted_at?: Date;
 
-  @OneToMany(type => Connection, (connection) => connection.subnet)
-  connections: Connection[];
+  @OneToMany(type => Device, (device) => device.subnet)
+  devices: Device[];
 
   @ManyToOne(type => Network, (network) => network.subnets)
   @JoinColumn({

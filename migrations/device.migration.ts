@@ -25,11 +25,11 @@ export class device1679908366897 implements MigrationInterface {
                     },
                     {
                         name: "ip_address",
-                        type: "int",
+                        type: "nvarchar",
                     },
                     {
                         name: "mac_address",
-                        type: "int",
+                        type: "nvarchar",
                     },
                     {
                         name: "status",
@@ -60,6 +60,10 @@ export class device1679908366897 implements MigrationInterface {
                         name: "department_id",
                         type: "int",
                     },
+                    {
+                        name: "subnet_id",
+                        type: "int",
+                    },
                 ]
             }),
             true,
@@ -71,6 +75,16 @@ export class device1679908366897 implements MigrationInterface {
                 columnNames: ["department_id"],
                 referencedColumnNames: ["id"],
                 referencedTableName: "departments",
+                onDelete: "CASCADE",
+            }),
+        )
+
+        await queryRunner.createForeignKey(
+            "devices",
+            new TableForeignKey({
+                columnNames: ["subnet_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "subnets",
                 onDelete: "CASCADE",
             }),
         )

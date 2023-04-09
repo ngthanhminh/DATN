@@ -25,4 +25,7 @@ export class UpdateDeviceDto extends CreateDeviceDto {
      @IsOptional()
      department_id: number;
 
+     @IsOptional()
+     subnet_id: number;
+
 }

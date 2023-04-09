@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Device } from './device.entity';
 import { Network } from './network.entity';
+import { User } from './user.entity';
 
 @Entity({
   name: 'departments',
@@ -34,6 +35,12 @@ export class Department {
   })
   location: string;
 
+  @Column({
+    type: 'int',
+    name: 'user_id',
+  })
+  user_id: number;
+
   @CreateDateColumn({
     name: 'created_at',
   })
@@ -55,4 +62,9 @@ export class Department {
   @OneToMany(type => Device, (device) => device.department)
   devices: Device[];
 
+  @ManyToOne(type => User, (user) => user.departments)
+  @JoinColumn({
+    name: "user_id"
+  })
+  user: User;
 }

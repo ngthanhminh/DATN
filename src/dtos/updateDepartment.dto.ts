@@ -10,4 +10,6 @@ export class UpdateDepartmentDto extends CreateDepartmentDto {
      @IsOptional()
      location: string;
 
+     @IsOptional()
+     user_id: number;
 }

@@ -15,4 +15,7 @@ export class CreateDepartmentDto {
      @IsNotEmpty()
      location: string;
 
+     @IsNumberString()
+     user_id: number;
+
 }

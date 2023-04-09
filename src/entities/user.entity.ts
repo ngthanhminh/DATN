@@ -67,5 +67,7 @@ export class User {
   })
   deleted_at?: Date;
 
+  @OneToMany(type => Department, (department) => department.user)
+  departments: Department[];
 
 }

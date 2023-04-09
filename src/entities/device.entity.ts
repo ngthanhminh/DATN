@@ -10,7 +10,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Department } from './department.entity';
-import { Connection } from './connection.entity';
+import { Subnet } from './subnet.entity';
 
 @Entity({
   name: 'devices',
@@ -60,6 +60,12 @@ export class Device {
   })
   department_id: number;
 
+  @Column({
+    type: 'int',
+    name: 'subnet_id',
+  })
+  subnet_id: number;
+
 
   @CreateDateColumn({
     name: 'created_at',
@@ -82,7 +88,10 @@ export class Device {
   })
   department: Department;
 
-  @OneToMany(type => Connection, (connection) => connection.device)
-  connections: Connection[];
+  @ManyToOne(type => Subnet, (subnet) => subnet.devices)
+  @JoinColumn({
+    name: 'subnet_id',
+  })
+  subnet: Subnet;
 
 }

@@ -28,4 +28,7 @@ export class CreateDeviceDto {
      @IsNumberString()
      department_id: number;
 
+     @IsNumberString()
+     subnet_id: number;
+
 }
