@@ -48,10 +48,11 @@ export class Device {
   ip_address: string;
 
   @Column({
-    type: 'int',
+    type: 'varchar',
+    length: 255,
     name: 'mac_address',
   })
-  mac_address: number;
+  mac_address: string;
 
   @Column({
     type: 'int',

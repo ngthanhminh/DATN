@@ -12,6 +12,11 @@ import { UserModule } from './modules/users/user.module';
 import { Network } from './entities/network.entity';
 import { Connection } from './entities/connection.entity';
 import { VlanModule } from './modules/vlans/vlan.module';
+import { DeviceModule } from './modules/devices/device.module';
+import { DepartmentModule } from './modules/departments/department.module';
+import { NetworkModule } from './modules/networks/network.module';
+import { SubnetModule } from './modules/subnets/subnet.module';
+import { ConnectionModule } from './modules/connections/connection.module';
 
 @Module({
   imports: [
@@ -27,6 +32,11 @@ import { VlanModule } from './modules/vlans/vlan.module';
     }),
     UserModule,
     VlanModule,
+    DeviceModule,
+    DepartmentModule,
+    NetworkModule,
+    SubnetModule,
+    ConnectionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

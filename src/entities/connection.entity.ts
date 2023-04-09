@@ -7,7 +7,8 @@ import {
   DeleteDateColumn,
   OneToOne,
   OneToMany,
-  ManyToOne
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
 import { Device } from './device.entity';
 import { Subnet } from './subnet.entity';
@@ -23,13 +24,13 @@ export class Connection {
     type: 'int',
     name: 'device_id',
   })
-  device_id: string;
+  device_id: number;
 
   @Column({
     type: 'int',
     name: 'subnet_id',
   })
-  subnet_id: string;
+  subnet_id: number;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -47,9 +48,15 @@ export class Connection {
   deleted_at?: Date;
 
   @ManyToOne(type => Device, (device) => device.connections)
+  @JoinColumn({
+    name: "device_id",
+  })
   device: Device;
 
   @ManyToOne(type => Subnet, (subnet) => subnet.connections)
+  @JoinColumn({
+    name: "subnet_id",
+  })
   subnet: Subnet;
 
 }
