@@ -40,6 +40,21 @@ export class NetworkService {
           }
      }
 
+     // get all network in a department 
+     async getAllNetworkInDepartment(departmentId: number): Promise<Network[]> {
+          try {
+               const networks = await this.networkRepository.find({ where: { department_id: departmentId } });
+               if (networks.length === 0) {
+                    throw new HttpException(`Network dose not exist in department`, HttpStatus.NOT_FOUND);
+               }
+               return networks;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(`Network dose not exist in department`, HttpStatus.NOT_FOUND);
+          }
+     }
+
      // get network in a department with networkId
      async getNetworkInDepartment(networkId: number, departmentId: number): Promise<Network> {
           try {

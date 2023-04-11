@@ -5,8 +5,7 @@ import { Subnet } from 'src/entities/subnet.entity';
 import { SubnetRepository } from 'src/repositories/subnet.repository';
 import { NetworkService } from '../networks/network.service';
 import { NetworkFeature } from 'src/utils/network.util';
-import * as ip from 'ip';
-import * as subnetCalculator from 'ip-subnet-calculator';
+import { In } from 'typeorm';
 
 @Injectable()
 export class SubnetService {
@@ -87,6 +86,24 @@ export class SubnetService {
           }
      }
 
+     // get all subnet in Department
+     async getSubnetInDepartment(departmentId: number): Promise<any> {
+          try {
+               const networks = await this.networkService.getAllNetworkInDepartment(departmentId);
+               const networkIds = networks.map((network) => { return network.id });
+               // get all subnet
+               const subnets = await this.subnetRepository.find({
+                    where: { network_id: In(networkIds) },
+                    relations: ['network'],
+               })
+               return subnets;
+          }
+          catch (error) {
+               console.log(error);
+               return error;
+          }
+     }
+
      // get all ipaddress in a subnet (subnet in a network, network in a department)
      async getIPAddressSubnet(subnetId: number, departmentId: number): Promise<any> {
           try {
@@ -94,7 +111,7 @@ export class SubnetService {
                const network = await this.networkService.getNetworkInDepartment(subnet.network_id, departmentId);
                if (subnet && network) {
                     const networkFeature = new NetworkFeature();
-                    const ips = networkFeature.generateIPRange(network.gateway, network.subnet_mask);
+                    const ips = networkFeature.generateIPRange(network.network_address, network.subnet_mask);
                     return ips;
                }
                throw new HttpException(`Subnet or Network does not exist`, HttpStatus.NOT_FOUND);
