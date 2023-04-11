@@ -40,6 +40,25 @@ export class NetworkFeature {
           return octets.join('.');
      }
 
+     // Tính toán subnet mask từ prefix length
+     static calculateSubnetMask(prefixLength: number): string {
+          // Kiểm tra nếu độ dài prefix không phù hợp với IPv4
+          if (prefixLength < 0 || prefixLength > 32) {
+               throw new Error('Invalid prefix length.');
+          }
+
+          const binaryMask = '1'.repeat(prefixLength).padEnd(32, '0'); // Tạo ra binary mask
+          const octets = [
+               parseInt(binaryMask.substring(0, 8), 2),
+               parseInt(binaryMask.substring(8, 16), 2),
+               parseInt(binaryMask.substring(16, 24), 2),
+               parseInt(binaryMask.substring(24), 2),
+          ]; // Chuyển binary mask thành các octet
+
+          const subnetMask = octets.join('.'); // Nối octets thành địa chỉ subnet mask
+          return subnetMask;
+     }
+
      // Tinh toan dia chi mang tu dia chi gateway và subnet mask
      static calculateNetworkAddress(gateway: string, subnetMask: string): string {
           const gatewayOctets = gateway.split('.');

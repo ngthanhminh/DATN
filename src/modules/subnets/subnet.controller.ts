@@ -21,12 +21,11 @@ export class SubnetController {
           return this.subnetService.getSubnetInDepartment(departmentId);
      }
 
-     @Get('/:subnetId/department/:departmentId')
+     @Get('/:subnetId/ipAddress')
      async getIpInSubnet(
           @Param('subnetId') subnetId: number,
-          @Param('departmentId') departmentId: number
      ): Promise<any> {
-          return this.subnetService.getIPAddressSubnet(subnetId, departmentId);
+          return this.subnetService.getIPAddressSubnet(subnetId);
      }
 
      @Get('caculate/:numSubnets')

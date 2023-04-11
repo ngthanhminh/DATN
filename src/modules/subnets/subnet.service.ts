@@ -104,14 +104,13 @@ export class SubnetService {
           }
      }
 
-     // get all ipaddress in a subnet (subnet in a network, network in a department)
-     async getIPAddressSubnet(subnetId: number, departmentId: number): Promise<any> {
+     // get all ipaddress in a subnet
+     async getIPAddressSubnet(subnetId: number): Promise<any> {
           try {
                const subnet = await this.getSubnetById(subnetId);
-               const network = await this.networkService.getNetworkInDepartment(subnet.network_id, departmentId);
-               if (subnet && network) {
+               if (subnet) {
                     const networkFeature = new NetworkFeature();
-                    const ips = networkFeature.generateIPRange(network.network_address, network.subnet_mask);
+                    const ips = networkFeature.generateIPRange(subnet.subnet_address, subnet.subnet_mask);
                     return ips;
                }
                throw new HttpException(`Subnet or Network does not exist`, HttpStatus.NOT_FOUND);
@@ -124,24 +123,40 @@ export class SubnetService {
 
      // calculate subnet 
      async caculateSubnet(network: string, netSubnetMask: string, subnets: number): Promise<any> {
-          // Tính số địa chỉ IP từ địa chỉ mạng
-          const numIpAddress = NetworkFeature.calcNumOfIPAddresses(network, netSubnetMask);
-          const octets = network.split('.');
-          const subnetBits = Math.ceil(Math.log2(subnets));
-          const subnetMask = (0xffffffff << (32 - subnetBits)) >>> 0;
-          const size = Math.pow(2, subnetBits);
-          const numberAddress = numIpAddress / size;
-          const prefixLength = 32 - Math.ceil(Math.log2(numberAddress));
-          const subnetsArr = [];
+          try {
+               const net = await this.networkService.getNetworkByAddress(network, netSubnetMask);
+               if (net) {
+                    // Tính số địa chỉ IP từ địa chỉ mạng
+                    const numIpAddress = NetworkFeature.calcNumOfIPAddresses(network, netSubnetMask);
+                    const octets = network.split('.');
+                    const subnetBits = Math.ceil(Math.log2(subnets));
+                    const size = Math.pow(2, subnetBits);
+                    const numberAddress = numIpAddress / size;
+                    const prefixLength = 32 - Math.ceil(Math.log2(numberAddress));
+                    const subnetMask = NetworkFeature.calculateSubnetMask(prefixLength);
+                    const subnetsArr = [];
 
-          for (let i = 0; i < size; i++) {
-               const subnetOctet = i * (numIpAddress / size);
-               const subnetAddress = ((parseInt(octets[0]) << 24) | (parseInt(octets[1]) << 16) | (parseInt(octets[2]) << 8) | subnetOctet) >>> 0;
-               const subnet = `${subnetAddress >>> 24}.${(subnetAddress >> 16) & 255}.${(subnetAddress >> 8) & 255}.${subnetAddress & 255}/${prefixLength}`;
-               subnetsArr.push(subnet);
+                    for (let i = 0; i < size; i++) {
+                         const subnetOctet = i * (numIpAddress / size);
+                         const subnetAddress = ((parseInt(octets[0]) << 24) | (parseInt(octets[1]) << 16) | (parseInt(octets[2]) << 8) | subnetOctet) >>> 0;
+                         const subnet_address = `${subnetAddress >>> 24}.${(subnetAddress >> 16) & 255}.${(subnetAddress >> 8) & 255}.${subnetAddress & 255}`;
+
+                         const subnet = new Subnet();
+                         subnet.network_id = net.id;
+                         subnet.subnet_address = subnet_address;
+                         subnet.subnet_mask = subnetMask;
+
+                         subnetsArr.push(subnet);
+                    }
+
+                    return this.subnetRepository.save(subnetsArr);
+               }
+               throw new HttpException(`Can't calculate subnet`, HttpStatus.BAD_REQUEST);
           }
-
-          return subnetsArr;
+          catch (error) {
+               console.log("Error: ", error);
+               return error;
+          }
      }
 
 }
