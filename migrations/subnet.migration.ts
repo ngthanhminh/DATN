@@ -20,6 +20,14 @@ export class subnet1679908366697 implements MigrationInterface {
                         generationStrategy: 'increment',
                     },
                     {
+                        name: "subnet_address",
+                        type: "varchar",
+                    },
+                    {
+                        name: "subnet_mask",
+                        type: "varchar",
+                    },
+                    {
                         name: "name",
                         type: "varchar",
                     },

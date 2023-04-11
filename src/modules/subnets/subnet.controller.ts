@@ -14,6 +14,23 @@ export class SubnetController {
           return this.subnetService.getAllSubnets();
      }
 
+     @Get('/:subnetId/department/:departmentId')
+     async getSubnetInDepartment(
+          @Param('subnetId') subnetId: number,
+          @Param('departmentId') departmentId: number
+     ): Promise<any> {
+          return this.subnetService.getIPAddressSubnet(subnetId, departmentId);
+     }
+
+     @Get('caculate/:numSubnets')
+     async caculateSubnet(
+          @Param('numSubnets') numSubnets: number,
+          @Body('networkAddress') networkAddress: string,
+          @Body('subnetMask') subnetMask: string,
+     ): Promise<any> {
+          return this.subnetService.caculateSubnet(networkAddress, subnetMask, numSubnets);
+     }
+
      @Get(':id')
      async getSubnet(@Param('id') id: number): Promise<Subnet> {
           return this.subnetService.getSubnetById(id);

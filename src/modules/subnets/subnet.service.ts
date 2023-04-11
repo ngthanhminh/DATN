@@ -3,10 +3,17 @@ import { CreateSubnetDto } from 'src/dtos/createSubnet.dto';
 import { UpdateSubnetDto } from 'src/dtos/updateSubnet.dto';
 import { Subnet } from 'src/entities/subnet.entity';
 import { SubnetRepository } from 'src/repositories/subnet.repository';
+import { NetworkService } from '../networks/network.service';
+import { NetworkFeature } from 'src/utils/network.util';
+import * as ip from 'ip';
+import * as subnetCalculator from 'ip-subnet-calculator';
 
 @Injectable()
 export class SubnetService {
-     constructor(private readonly subnetRepository: SubnetRepository) { }
+     constructor(
+          private readonly subnetRepository: SubnetRepository,
+          private readonly networkService: NetworkService,
+     ) { }
 
      // get all Subnet 
      async getAllSubnets(): Promise<Subnet[]> {
@@ -78,6 +85,46 @@ export class SubnetService {
           catch (error) {
                console.log("Error: ", error);
           }
+     }
+
+     // get all ipaddress in a subnet (subnet in a network, network in a department)
+     async getIPAddressSubnet(subnetId: number, departmentId: number): Promise<any> {
+          try {
+               const subnet = await this.getSubnetById(subnetId);
+               const network = await this.networkService.getNetworkInDepartment(subnet.network_id, departmentId);
+               if (subnet && network) {
+                    const networkFeature = new NetworkFeature();
+                    const ips = networkFeature.generateIPRange(network.gateway, network.subnet_mask);
+                    return ips;
+               }
+               throw new HttpException(`Subnet or Network does not exist`, HttpStatus.NOT_FOUND);
+          }
+          catch (error) {
+               console.log(error);
+               return error;
+          }
+     }
+
+     // calculate subnet 
+     async caculateSubnet(network: string, netSubnetMask: string, subnets: number): Promise<any> {
+          // Tính số địa chỉ IP từ địa chỉ mạng
+          const numIpAddress = NetworkFeature.calcNumOfIPAddresses(network, netSubnetMask);
+          const octets = network.split('.');
+          const subnetBits = Math.ceil(Math.log2(subnets));
+          const subnetMask = (0xffffffff << (32 - subnetBits)) >>> 0;
+          const size = Math.pow(2, subnetBits);
+          const numberAddress = numIpAddress / size;
+          const prefixLength = 32 - Math.ceil(Math.log2(numberAddress));
+          const subnetsArr = [];
+
+          for (let i = 0; i < size; i++) {
+               const subnetOctet = i * (numIpAddress / size);
+               const subnetAddress = ((parseInt(octets[0]) << 24) | (parseInt(octets[1]) << 16) | (parseInt(octets[2]) << 8) | subnetOctet) >>> 0;
+               const subnet = `${subnetAddress >>> 24}.${(subnetAddress >> 16) & 255}.${(subnetAddress >> 8) & 255}.${subnetAddress & 255}/${prefixLength}`;
+               subnetsArr.push(subnet);
+          }
+
+          return subnetsArr;
      }
 
 }

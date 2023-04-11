@@ -28,6 +28,21 @@ export class Subnet {
   })
   name: string;
 
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'subnet_address',
+  })
+  subnet_address: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'subnet_mask',
+  })
+  subnet_mask: string;
+
   @Column({
     type: 'varchar',
     length: 255,

@@ -1,13 +1,11 @@
 import {
      IsOptional,
 } from 'class-validator';
+import { CreateNetworkDto } from './createNetwork.dto';
 
-export class UpdateNetworkDto {
+export class UpdateNetworkDto extends CreateNetworkDto {
      @IsOptional()
      name: string;
-
-     @IsOptional()
-     ip_address: string;
 
      @IsOptional()
      subnet_mask: string;

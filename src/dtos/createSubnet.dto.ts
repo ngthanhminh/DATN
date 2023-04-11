@@ -11,6 +11,12 @@ export class CreateSubnetDto {
      @IsNotEmpty()
      name: string;
 
+     @IsNotEmpty()
+     subnet_address: string;
+
+     @IsNotEmpty()
+     subnet_mask: string;
+
      @IsOptional()
      decription: string;
 
