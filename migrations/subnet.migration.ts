@@ -22,6 +22,7 @@ export class subnet1679908366697 implements MigrationInterface {
                     {
                         name: "subnet_address",
                         type: "varchar",
+                        isUnique: true,
                     },
                     {
                         name: "subnet_mask",
@@ -30,6 +31,7 @@ export class subnet1679908366697 implements MigrationInterface {
                     {
                         name: "name",
                         type: "varchar",
+                        isNullable: true,
                     },
                     {
                         name: "decription",
@@ -39,6 +41,7 @@ export class subnet1679908366697 implements MigrationInterface {
                     {
                         name: "permission",
                         type: "varchar",
+                        isNullable: true,
                     },
                     {
                         name: "created_at",
@@ -63,6 +66,7 @@ export class subnet1679908366697 implements MigrationInterface {
                     {
                         name: "vlan_id",
                         type: "int",
+                        isNullable: true,
                     },
                 ]
             }),

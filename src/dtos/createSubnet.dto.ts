@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 export class CreateSubnetDto {
-     @IsNotEmpty()
+     @IsOptional()
      name: string;
 
      @IsNotEmpty()
@@ -20,13 +20,13 @@ export class CreateSubnetDto {
      @IsOptional()
      decription: string;
 
-     @IsNotEmpty()
+     @IsOptional()
      permission: string;
 
      @IsNumberString()
      network_id: number;
 
-     @IsNumberString()
+     @IsOptional()
      vlan_id: number;
 
 }

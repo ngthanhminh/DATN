@@ -40,6 +40,21 @@ export class NetworkService {
           }
      }
 
+     // get a Network with network address
+     async getNetworkByAddress(networkAddress: string, subnetMask: string): Promise<Network> {
+          try {
+               const Network = await this.networkRepository.findOne({ network_address: networkAddress, subnet_mask: subnetMask });
+               if (!Network) {
+                    throw new HttpException(`Network does not exist`, HttpStatus.NOT_FOUND);
+               }
+               return Network;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(`Network does not exist`, HttpStatus.NOT_FOUND);
+          }
+     }
+
      // get all network in a department 
      async getAllNetworkInDepartment(departmentId: number): Promise<Network[]> {
           try {
@@ -78,7 +93,7 @@ export class NetworkService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Can't create Device`, HttpStatus.NOT_FOUND);
+               throw new HttpException(`Can't create Network`, HttpStatus.NOT_FOUND);
           }
      }
 
