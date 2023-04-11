@@ -14,8 +14,15 @@ export class SubnetController {
           return this.subnetService.getAllSubnets();
      }
 
-     @Get('/:subnetId/department/:departmentId')
+     @Get('/department/:departmentId')
      async getSubnetInDepartment(
+          @Param('departmentId') departmentId: number
+     ): Promise<any> {
+          return this.subnetService.getSubnetInDepartment(departmentId);
+     }
+
+     @Get('/:subnetId/department/:departmentId')
+     async getIpInSubnet(
           @Param('subnetId') subnetId: number,
           @Param('departmentId') departmentId: number
      ): Promise<any> {
