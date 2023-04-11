@@ -24,7 +24,7 @@ export class networkt1679908365697 implements MigrationInterface {
                         type: "varchar",
                     },
                     {
-                        name: "ip_address",
+                        name: "network_address",
                         type: "varchar",
                         isUnique: true,
                     },

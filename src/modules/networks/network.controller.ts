@@ -24,11 +24,6 @@ export class NetworkController {
           return this.networkService.getAllNetworks();
      }
 
-     @Get(':id')
-     async getNetwork(@Param('id') id: number): Promise<Network> {
-          return this.networkService.getNetworkById(id);
-     }
-
      @Post()
      async createNetwork(
           @Body() NetworkData: CreateNetworkDto

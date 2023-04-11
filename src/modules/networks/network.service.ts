@@ -1,8 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateNetworkDto } from 'src/dtos/createNetwork.dto';
 import { UpdateNetworkDto } from 'src/dtos/updateNetwork.dto';
 import { Network } from 'src/entities/network.entity';
 import { NetworkRepository } from 'src/repositories/network.repository';
+import { IPv4 } from 'ipaddr.js';
+import { NetworkFeature } from 'src/utils/network.util';
 
 @Injectable()
 export class NetworkService {
@@ -38,10 +40,25 @@ export class NetworkService {
           }
      }
 
+     // get network in a department with networkId
+     async getNetworkInDepartment(networkId: number, departmentId: number): Promise<Network> {
+          try {
+               const network = await this.networkRepository.findOne({ where: { id: networkId, department_id: departmentId } });
+               if (!network) {
+                    throw new HttpException(`Network dose not exist`, HttpStatus.NOT_FOUND);
+               }
+               return network;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(`Network dose not exist`, HttpStatus.NOT_FOUND);
+          }
+     }
 
      // create Network 
      async createNetwork(networkData: CreateNetworkDto): Promise<Partial<Network>> {
           try {
+               networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
                return await this.networkRepository.save(networkData);
           }
           catch (error) {
@@ -56,6 +73,9 @@ export class NetworkService {
           try {
                const network = await this.networkRepository.findOne({ id: networkId })
                if (network) {
+                    if (networkData.gateway || networkData.subnet_mask) {
+                         networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
+                    }
                     await this.networkRepository.update(networkId, networkData);
                     return this.networkRepository.findOne({ id: networkId })
                }
@@ -81,4 +101,5 @@ export class NetworkService {
                console.log("Error: ", error);
           }
      }
+
 }

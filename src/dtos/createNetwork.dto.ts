@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
      IsNotEmpty,
      IsString,
@@ -12,8 +13,8 @@ export class CreateNetworkDto {
      @IsNotEmpty()
      name: string;
 
-     @IsNotEmpty()
-     ip_address: string;
+     @Exclude()
+     network_address: string;
 
      @IsNotEmpty()
      subnet_mask: string;

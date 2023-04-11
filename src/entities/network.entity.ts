@@ -30,9 +30,9 @@ export class Network {
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'ip_address',
+    name: 'network_address',
   })
-  ip_address: string;
+  network_address: string;
 
   @Column({
     type: 'varchar',

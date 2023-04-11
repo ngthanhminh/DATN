@@ -8,6 +8,12 @@ export class UpdateSubnetDto extends CreateSubnetDto {
      name: string;
 
      @IsOptional()
+     subnet_address: string;
+
+     @IsOptional()
+     subnet_mask: string;
+
+     @IsOptional()
      decription: string;
 
      @IsOptional()
