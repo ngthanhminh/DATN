@@ -8,6 +8,7 @@ import {
      Delete,
      Body,
      Param,
+     ParseIntPipe,
 } from '@nestjs/common';
 import { NetworkService } from './network.service';
 import { Network } from 'src/entities/network.entity';
@@ -22,6 +23,20 @@ export class NetworkController {
      @Get()
      async getAllNetworks(): Promise<Network[]> {
           return this.networkService.getAllNetworks();
+     }
+
+     @Get(':id')
+     async getNetwork(
+          @Param('id', ParseIntPipe) id: number,
+     ): Promise<Network> {
+          return this.networkService.getNetworkById(id);
+     }
+
+     @Get('/all/department/:id')
+     async getNetworksInDepartment(
+          @Param('id', ParseIntPipe) id: number,
+     ): Promise<Network[]> {
+          return this.networkService.getAllNetworkInDepartment(id);
      }
 
      @Post()

@@ -58,7 +58,11 @@ export class NetworkService {
      // get all network in a department 
      async getAllNetworkInDepartment(departmentId: number): Promise<Network[]> {
           try {
-               const networks = await this.networkRepository.find({ where: { department_id: departmentId } });
+               const networks = await this.networkRepository
+                    .createQueryBuilder('networks')
+                    .innerJoin('subnets', 'subnets', 'subnets.network = networks.id')
+                    .where('subnets.department_id = :departmentId', { departmentId: departmentId })
+                    .getMany();
                if (networks.length === 0) {
                     throw new HttpException(`Network dose not exist in department`, HttpStatus.NOT_FOUND);
                }
@@ -67,21 +71,6 @@ export class NetworkService {
           catch (error) {
                console.log(error);
                throw new HttpException(`Network dose not exist in department`, HttpStatus.NOT_FOUND);
-          }
-     }
-
-     // get network in a department with networkId
-     async getNetworkInDepartment(networkId: number, departmentId: number): Promise<Network> {
-          try {
-               const network = await this.networkRepository.findOne({ where: { id: networkId, department_id: departmentId } });
-               if (!network) {
-                    throw new HttpException(`Network dose not exist`, HttpStatus.NOT_FOUND);
-               }
-               return network;
-          }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(`Network dose not exist`, HttpStatus.NOT_FOUND);
           }
      }
 

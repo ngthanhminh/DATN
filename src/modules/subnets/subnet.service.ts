@@ -89,11 +89,9 @@ export class SubnetService {
      // get all subnet in Department
      async getSubnetInDepartment(departmentId: number): Promise<any> {
           try {
-               const networks = await this.networkService.getAllNetworkInDepartment(departmentId);
-               const networkIds = networks.map((network) => { return network.id });
                // get all subnet
                const subnets = await this.subnetRepository.find({
-                    where: { network_id: In(networkIds) },
+                    where: { department_id: departmentId },
                     relations: ['network'],
                })
                return subnets;
