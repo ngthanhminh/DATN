@@ -55,6 +55,20 @@ export class Device {
   mac_address: string;
 
   @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'ip_type',
+  })
+  ip_type: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'ip_expries',
+  })
+  ip_expries: Date;
+
+  @Column({
     type: 'int',
     name: 'department_id',
   })
