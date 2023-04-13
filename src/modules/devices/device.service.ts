@@ -80,4 +80,19 @@ export class DeviceService {
           }
      }
 
+     // update id of device
+     async updateIdOfDevice(macAddress: string, ipAddress: string): Promise<Device> {
+          try {
+               const device = await this.deviceRepository.findOne({ mac_address: macAddress })
+               if (device) {
+                    device.ip_address = ipAddress;
+                    return this.deviceRepository.save(device);
+               }
+               throw new HttpException(`Can't assign ip for Device`, HttpStatus.BAD_REQUEST);
+          }
+          catch (error) {
+               console.log("Error: ", error);
+               return error;
+          }
+     }
 }

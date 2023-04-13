@@ -32,8 +32,13 @@ export class device1679908366897 implements MigrationInterface {
                         type: "nvarchar",
                     },
                     {
-                        name: "status",
+                        name: "ip_type",
                         type: "varchar",
+                    },
+                    {
+                        name: "expries",
+                        type: "varchar",
+                        isNullable: true,
                     },
                     {
                         name: "decription",
