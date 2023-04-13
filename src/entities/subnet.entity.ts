@@ -13,6 +13,7 @@ import {
 import { Network } from './network.entity';
 import { VLAN } from './vlan.entity';
 import { Device } from './device.entity';
+import { Department } from './department.entity';
 
 @Entity({
   name: 'subnets',
@@ -57,6 +58,13 @@ export class Subnet {
   })
   permission: string;
 
+
+  @Column({
+    type: 'int',
+    name: 'department_id',
+  })
+  department_id: number;
+
   @Column({
     type: 'int',
     name: 'network_id',
@@ -86,6 +94,12 @@ export class Subnet {
 
   @OneToMany(type => Device, (device) => device.subnet)
   devices: Device[];
+
+  @ManyToOne(type => Department, (department) => department.subnets)
+  @JoinColumn({
+    name: "department_id",
+  })
+  department: Department;
 
   @ManyToOne(type => Network, (network) => network.subnets)
   @JoinColumn({

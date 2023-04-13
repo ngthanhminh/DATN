@@ -10,20 +10,20 @@ export class DepartmentController {
      constructor(private readonly departmentService: DepartmentService) { }
 
      @Get()
-     async getAllDevices(): Promise<Department[]> {
+     async getAllDepartments(): Promise<Department[]> {
           return this.departmentService.getAllDepartments();
      }
 
      @Get(':id')
-     async getDevice(@Param('id') id: number): Promise<Department> {
+     async getDepartment(@Param('id') id: number): Promise<Department> {
           return this.departmentService.getDepartmentById(id);
      }
 
      @Post()
-     async createDevice(
-          @Body() deviceData: CreateDepartmentDto
+     async createDepartment(
+          @Body() DepartmentData: CreateDepartmentDto
      ): Promise<Department> {
-          return this.departmentService.createDepartment(deviceData);
+          return this.departmentService.createDepartment(DepartmentData);
      }
 
      @Patch(':id')

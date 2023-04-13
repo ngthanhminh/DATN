@@ -13,4 +13,7 @@ export class UpdateSubnetDto extends CreateSubnetDto {
      @IsOptional()
      network_id: number;
 
+     @IsOptional()
+     department_id: number;
+
 }

@@ -56,24 +56,9 @@ export class networkt1679908365697 implements MigrationInterface {
                         // default: "now()",
                         isNullable: true,
                     },
-                    {
-                        name: "department_id",
-                        type: "int",
-                        isNullable: true,
-                    }
                 ]
             }),
             true,
-        )
-
-        await queryRunner.createForeignKey(
-            "networks",
-            new TableForeignKey({
-                columnNames: ["department_id"],
-                referencedColumnNames: ["id"],
-                referencedTableName: "departments",
-                onDelete: "CASCADE",
-            }),
         )
     }
 

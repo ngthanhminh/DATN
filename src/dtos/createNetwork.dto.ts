@@ -25,7 +25,4 @@ export class CreateNetworkDto {
      @IsOptional()
      decription: string;
 
-     @IsNumberString()
-     department_id: number;
-
 }

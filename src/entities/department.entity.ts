@@ -13,6 +13,7 @@ import {
 import { Device } from './device.entity';
 import { Network } from './network.entity';
 import { User } from './user.entity';
+import { Subnet } from './subnet.entity';
 
 @Entity({
   name: 'departments',
@@ -56,8 +57,8 @@ export class Department {
   })
   deleted_at?: Date;
 
-  @OneToMany(type => Network, (vlan) => vlan.department)
-  networks: Network[];
+  @OneToMany(type => Subnet, (subnet) => subnet.department)
+  subnets: Subnet[];
 
   @OneToMany(type => Device, (device) => device.department)
   devices: Device[];

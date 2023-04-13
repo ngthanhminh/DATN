@@ -48,12 +48,6 @@ export class Network {
   })
   gateway: string;
 
-  @Column({
-    type: 'int',
-    name: 'department_id',
-  })
-  department_id: number;
-
   @CreateDateColumn({
     name: 'created_at',
   })
@@ -75,12 +69,6 @@ export class Network {
     name: 'deleted_at',
   })
   deleted_at?: Date;
-
-  @ManyToOne(type => Department, (department) => department.networks)
-  @JoinColumn({
-    name: "department_id",
-  })
-  department: Department;
 
   @OneToMany(type => Subnet, (subnet) => subnet.network)
   subnets: Subnet[];
