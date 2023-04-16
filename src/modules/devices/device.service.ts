@@ -23,6 +23,16 @@ export class DeviceService {
           }
      }
 
+     // get count 
+     async getCount(): Promise<number> {
+          return this.deviceRepository.count();
+     }
+
+     // get count in a department
+     async getCountInDepartment(departmentId: number): Promise<number> {
+          return this.deviceRepository.count({ department_id: departmentId });
+     }
+
      // get a Device with Id
      async getDeviceById(deviceId: number): Promise<Device> {
           try {

@@ -29,6 +29,11 @@ export class SubnetService {
           }
      }
 
+     // get count 
+     async getCount(): Promise<number> {
+          return this.subnetRepository.count();
+     }
+
      // get a Subnet with Id
      async getSubnetById(SubnetId: number): Promise<Subnet> {
           try {

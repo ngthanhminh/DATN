@@ -36,7 +36,7 @@ export class device1679908366897 implements MigrationInterface {
                         type: "varchar",
                     },
                     {
-                        name: "expries",
+                        name: "ip_expries",
                         type: "varchar",
                         isNullable: true,
                     },

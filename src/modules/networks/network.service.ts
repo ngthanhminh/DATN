@@ -25,6 +25,11 @@ export class NetworkService {
           }
      }
 
+     // get count 
+     async getCount(): Promise<number> {
+          return this.networkRepository.count();
+     }
+
      // get a Network with Id
      async getNetworkById(NetworkId: number): Promise<Network> {
           try {
