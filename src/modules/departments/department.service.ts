@@ -3,16 +3,21 @@ import { CreateDepartmentDto } from 'src/dtos/createDepartment.dto';
 import { UpdateDepartmentDto } from 'src/dtos/updateDepartment.dto';
 import { Department } from 'src/entities/department.entity';
 import { DepartmentRepository } from 'src/repositories/department.repository';
+import { DeviceService } from '../devices/device.service';
+import { Like } from "typeorm";
 
 @Injectable()
 export class DepartmentService {
-     constructor(private readonly departmentRepository: DepartmentRepository) { }
+     constructor(
+          private readonly departmentRepository: DepartmentRepository,
+          private readonly deviceService: DeviceService,
+     ) { }
 
      // get all Department 
      async getAllDepartments(): Promise<Department[]> {
           try {
                const departments = await this.departmentRepository.find();
-               if (departments.length == 0) {
+               if (departments.length === 0) {
                     throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
                }
                return departments;
@@ -21,6 +26,49 @@ export class DepartmentService {
                console.log(error);
                throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
           }
+     }
+
+     // search department
+     async searchDepartment(keysearch?: string): Promise<Department[]> {
+          try {
+               if (keysearch) {
+                    var departments = await this.departmentRepository.find({
+                         where: {
+                              name: `${keysearch}`,
+                         },
+                         relations: ['user', 'devices'],
+                    })
+                    return departments;
+               }
+
+               if (departments.length === 0) {
+                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               }
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+          }
+     }
+
+     // get department with all info
+     async getAllInfoDepartments(): Promise<any> {
+          try {
+               const departments = await this.departmentRepository.find({ relations: ['user', 'devices'] });
+               if (departments.length === 0) {
+                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               }
+               return departments;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+          }
+     }
+
+     // get count  
+     async getCount(): Promise<number> {
+          return this.departmentRepository.count();
      }
 
      // get a Department with Id

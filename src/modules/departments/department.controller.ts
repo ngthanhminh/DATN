@@ -1,4 +1,4 @@
-import { Controller, UsePipes, ValidationPipe, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
+import { Controller, UsePipes, ValidationPipe, Get, Post, Patch, Delete, Param, Body, Query } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { Department } from 'src/entities/department.entity';
 import { CreateDepartmentDto } from 'src/dtos/createDepartment.dto';
@@ -12,6 +12,18 @@ export class DepartmentController {
      @Get()
      async getAllDepartments(): Promise<Department[]> {
           return this.departmentService.getAllDepartments();
+     }
+
+     @Get('/search')
+     async searchDepartment(
+          @Query('keysearch') keysearch?: string,
+     ): Promise<Department[]> {
+          return this.departmentService.searchDepartment(keysearch);
+     }
+
+     @Get('/all')
+     getAllInfoDepartments(): Promise<any> {
+          return this.departmentService.getAllInfoDepartments();
      }
 
      @Get(':id')

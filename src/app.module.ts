@@ -2,7 +2,7 @@ import { VLAN } from './entities/vlan.entity';
 import { Subnet } from './entities/subnet.entity';
 import { Device } from './entities/device.entity';
 import { Department } from './entities/department.entity';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -15,6 +15,8 @@ import { DeviceModule } from './modules/devices/device.module';
 import { DepartmentModule } from './modules/departments/department.module';
 import { NetworkModule } from './modules/networks/network.module';
 import { SubnetModule } from './modules/subnets/subnet.module';
+import { HeaderMiddleware } from './common/middleware/header.middleware';
+import { CommonModule } from './modules/common/common.module';
 
 @Module({
   imports: [
@@ -34,8 +36,15 @@ import { SubnetModule } from './modules/subnets/subnet.module';
     DepartmentModule,
     NetworkModule,
     SubnetModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(HeaderMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

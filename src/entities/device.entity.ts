@@ -36,13 +36,6 @@ export class Device {
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'status',
-  })
-  status: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
     name: 'ip_address',
   })
   ip_address: string;

@@ -24,6 +24,19 @@ export class UserService {
     }
   }
 
+  // get count 
+  async getCount(): Promise<number> {
+    return this.userRepository.count();
+  }
+
+  // get user order by createAt
+  async getLastestUser(): Promise<any> {
+    return this.userRepository.find({
+      order: { created_at: 'DESC' },
+      take: 1,
+    });
+  }
+
   // get a user with Id
   async getUserById(userId: number): Promise<User> {
     try {

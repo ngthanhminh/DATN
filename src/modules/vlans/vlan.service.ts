@@ -8,6 +8,7 @@ import { VLANRepository } from 'src/repositories/vlan.repository';
 export class VlanService {
      constructor(private readonly vlanRepository: VLANRepository) { }
 
+     // get all vlan
      async getAllVlans(): Promise<VLAN[]> {
           try {
                const vlans = await this.vlanRepository.find();
@@ -20,6 +21,11 @@ export class VlanService {
                console.log(error);
                throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
           }
+     }
+
+     // get count 
+     async getCount(): Promise<number> {
+          return this.vlanRepository.count();
      }
 
      // get a user with Id

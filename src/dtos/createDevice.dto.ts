@@ -27,7 +27,7 @@ export class CreateDeviceDto {
      @IsEnum(IpType)
      ip_type: IpType;
 
-     @IsNotEmpty()
+     @IsOptional()
      ip_expries: Date;
 
      @IsString()
