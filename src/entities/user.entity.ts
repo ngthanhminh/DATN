@@ -52,6 +52,20 @@ export class User {
   })
   address: string;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'email',
+  })
+  email: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'phone_number',
+  })
+  phone_number: string;
+
   @CreateDateColumn({
     name: 'created_at',
   })

@@ -21,7 +21,29 @@ export class NetworkService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+          }
+     }
+
+     // search network
+     async searchNetwork(keysearch?: string): Promise<Network[]> {
+          try {
+               if (keysearch) {
+                    var networks = await this.networkRepository.find({
+                         where: {
+                              name: `${keysearch}`,
+                         },
+                    })
+                    return networks;
+               }
+
+               if (networks.length === 0) {
+                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               }
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
@@ -41,14 +63,14 @@ export class NetworkService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
      // get a Network with network address
-     async getNetworkByAddress(networkAddress: string, subnetMask: string): Promise<Network> {
+     async getNetworkByAddress(networkAddress: string): Promise<Network> {
           try {
-               const Network = await this.networkRepository.findOne({ network_address: networkAddress, subnet_mask: subnetMask });
+               const Network = await this.networkRepository.findOne({ where: { network_address: networkAddress } });
                if (!Network) {
                     throw new HttpException(`Network does not exist`, HttpStatus.NOT_FOUND);
                }
@@ -56,7 +78,7 @@ export class NetworkService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Network does not exist`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
@@ -75,7 +97,7 @@ export class NetworkService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Network dose not exist in department`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 
@@ -107,7 +129,7 @@ export class NetworkService {
           }
           catch (error) {
                console.log("Error: ", error);
-               return error;
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 
@@ -116,13 +138,14 @@ export class NetworkService {
           try {
                const network = await this.networkRepository.findOne({ id: networkId });
                if (network) {
-                    const networkD = await this.networkRepository.softRemove(network);
+                    const networkD = await this.networkRepository.remove(network);
                     return networkD;
                }
                throw new HttpException(`Can't delete Network`, HttpStatus.BAD_REQUEST);
           }
           catch (error) {
                console.log("Error: ", error);
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 

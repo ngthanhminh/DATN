@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { CreateUserDto } from 'src/dtos/createUser.dto';
 import { UpdateUserDto } from 'src/dtos/updateUser.dto';
 import { User } from 'src/entities/user.entity';
+import { RoleUser } from 'src/enums/roleUser.enum';
 import { PasswordFeature } from 'src/features/password.feature';
 import { UserRepository } from 'src/repositories/user.repository';
 
@@ -12,7 +13,7 @@ export class UserService {
   // get all user 
   async getAllUsers(): Promise<User[]> {
     try {
-      const users = await this.userRepository.find();
+      const users = await this.userRepository.find({ where: { role: RoleUser.USER } });
       if (users.length == 0) {
         throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
       }
@@ -24,6 +25,29 @@ export class UserService {
     }
   }
 
+  // search department
+  async searchDepartment(keysearch?: string): Promise<User[]> {
+    try {
+      if (keysearch) {
+        var user = await this.userRepository.find({
+          where: {
+            name: `${keysearch}`,
+          },
+          relations: ['user', 'devices'],
+        })
+        return user;
+      }
+
+      if (user.length === 0) {
+        throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+      }
+    }
+    catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
   // get count 
   async getCount(): Promise<number> {
     return this.userRepository.count();
@@ -32,8 +56,9 @@ export class UserService {
   // get user order by createAt
   async getLastestUser(): Promise<any> {
     return this.userRepository.find({
+      where: { role: RoleUser.USER },
       order: { created_at: 'DESC' },
-      take: 1,
+      take: 5,
     });
   }
 
@@ -52,18 +77,43 @@ export class UserService {
     }
   }
 
-
-  // create user 
-  async createUser(userData: CreateUserDto): Promise<Partial<User>> {
+  // get a user with username
+  async getUserByUsername(username: string): Promise<User> {
     try {
-      await PasswordFeature.HashPassWord(userData.password);
-      const user = await this.userRepository.save(userData);
-      user.password = undefined;
+      const user = await this.userRepository.findOne({ where: { username: username } });
+      if (!user) {
+        throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+      }
       return user;
     }
     catch (error) {
       console.log(error);
-      throw new HttpException(`Can't create User`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  // create user 
+  async createUser(userData: CreateUserDto): Promise<Partial<User>> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          name: userData.username,
+        }
+      });
+      if (!user) {
+        userData.password = PasswordFeature.HashPassWord(userData.password);
+        await this.userRepository.insert(userData);
+        return this.userRepository.findOne({
+          where: {
+            username: userData.username,
+          },
+        })
+      }
+      throw new HttpException(`Can't create user, Department already exists`, HttpStatus.BAD_REQUEST);
+    }
+    catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 

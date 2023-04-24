@@ -26,9 +26,21 @@ export class DepartmentController {
           return this.departmentService.getAllInfoDepartments();
      }
 
+     @Get('/user/:userId')
+     getAllDepartmentSubnets(
+          @Param('userId') userId: number,
+     ): Promise<any> {
+          return this.departmentService.getAllDepartmentSubnets(userId);
+     }
+
      @Get(':id')
      async getDepartment(@Param('id') id: number): Promise<Department> {
           return this.departmentService.getDepartmentById(id);
+     }
+
+     @Get(':id/device')
+     async getAllDevices(@Param('id') id: number): Promise<Department[]> {
+          return this.departmentService.getAllDevices(id);
      }
 
      @Post()

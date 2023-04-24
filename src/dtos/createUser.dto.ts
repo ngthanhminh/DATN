@@ -25,8 +25,15 @@ export class CreateUserDto {
      @IsEnum(RoleUser)
      role: RoleUser;
 
-     @IsString()
      @IsOptional()
      address: string;
+
+     @IsOptional()
+     @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/g)
+     email: string;
+
+     @IsOptional()
+     @Matches(/^\d{10}$/g)
+     phone_number: string;
 
 }

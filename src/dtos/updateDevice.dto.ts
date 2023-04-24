@@ -7,15 +7,11 @@ import {
      IsEnum,
 } from 'class-validator';
 import { CreateDeviceDto } from './createDevice.dto';
-import { StatusDevice } from 'src/enums/statusDevice.enum';
-import { IpType } from 'src/enums/ipType.enum';
+import { DeviceType } from 'src/enums/deviceType.enum';
 
 export class UpdateDeviceDto extends CreateDeviceDto {
      @IsOptional()
      name: string;
-
-     @IsOptional()
-     status: StatusDevice;
 
      @IsOptional()
      ip_address: string;
@@ -24,10 +20,7 @@ export class UpdateDeviceDto extends CreateDeviceDto {
      mac_address: string;
 
      @IsOptional()
-     ip_type: IpType;
-
-     @IsOptional()
-     ip_expries: Date;
+     device_type: DeviceType;
 
      @IsOptional()
      department_id: number;

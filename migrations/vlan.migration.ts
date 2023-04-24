@@ -29,6 +29,10 @@ export class vlan1679908365697 implements MigrationInterface {
                         isUnique: true,
                     },
                     {
+                        name: "decription",
+                        type: "nvarchar",
+                    },
+                    {
                         name: "created_at",
                         type: "timestamp",
                         default: "now()",

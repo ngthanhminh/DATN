@@ -6,8 +6,7 @@ import {
      IsNumberString,
      IsEnum,
 } from 'class-validator';
-import { IpType } from 'src/enums/ipType.enum';
-import { StatusDevice } from 'src/enums/statusDevice.enum';
+import { DeviceType } from 'src/enums/deviceType.enum';
 
 export class CreateDeviceDto {
      @IsNotEmpty()
@@ -17,18 +16,11 @@ export class CreateDeviceDto {
      decription: string;
 
      @IsNotEmpty()
-     @IsEnum(StatusDevice)
-     status: StatusDevice;
-
-     @IsNotEmpty()
      ip_address: string;
 
      @IsNotEmpty()
-     @IsEnum(IpType)
-     ip_type: IpType;
-
-     @IsOptional()
-     ip_expries: Date;
+     @IsEnum(DeviceType)
+     device_type: DeviceType;
 
      @IsString()
      mac_address: string;

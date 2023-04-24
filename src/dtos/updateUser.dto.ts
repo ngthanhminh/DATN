@@ -18,5 +18,8 @@ export class UpdateUserDto extends CreateUserDto {
      password: string;
 
      @IsOptional()
-     role: RoleUser;
+     email: RoleUser;
+
+     @IsOptional()
+     phone_number: RoleUser;
 }

@@ -9,6 +9,7 @@ import {
      Body,
      Param,
      ParseIntPipe,
+     Query,
 } from '@nestjs/common';
 import { NetworkService } from './network.service';
 import { Network } from 'src/entities/network.entity';
@@ -23,6 +24,13 @@ export class NetworkController {
      @Get()
      async getAllNetworks(): Promise<Network[]> {
           return this.networkService.getAllNetworks();
+     }
+
+     @Get('/search')
+     async searchDepartment(
+          @Query('keysearch') keysearch?: string,
+     ): Promise<Network[]> {
+          return this.networkService.searchNetwork(keysearch);
      }
 
      @Get(':id')

@@ -59,6 +59,37 @@ export class NetworkFeature {
           return subnetMask;
      }
 
+     // tính prefix từ subnet mask
+     static subnetMaskToPrefix(subnetMask: string): number {
+          const octets = subnetMask.split('.').map(Number);
+          let prefix = 0;
+          for (let i = 0; i < octets.length; i++) {
+               const binary = (octets[i] >>> 0).toString(2); // convert to binary string
+               prefix += binary.replace(/0/g, '').length; // count the number of 1s in the binary string
+          }
+          return prefix;
+     }
+
+     // Tính địa chỉ mạng từ địa chỉ subnet 
+     static getNetworkAddress(subnet: string): string {
+          const [network, prefixLength] = subnet.split('/');
+          const prefix = parseInt(prefixLength);
+          const octets = network.split('.').map(Number);
+
+          // set all bits after prefix to 0
+          for (let i = prefix; i < 32; i++) {
+               octets[Math.floor(i / 8)] &= ~(1 << (7 - (i % 8)));
+          }
+
+          return octets.join('.');
+     }
+
+     // Tính địa chỉ subnet 
+     static getHostAddress(subnet: string): string {
+          const [network, prefixLength] = subnet.split('/');
+          return network;
+     }
+
      // Tinh toan dia chi mang tu dia chi gateway và subnet mask
      static calculateNetworkAddress(gateway: string, subnetMask: string): string {
           const gatewayOctets = gateway.split('.');

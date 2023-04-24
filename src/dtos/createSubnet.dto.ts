@@ -29,7 +29,7 @@ export class CreateSubnetDto {
      @IsOptional()
      vlan_id: number;
 
-     @IsNumberString()
+     @IsOptional()
      department_id: number;
 
 }

@@ -11,7 +11,7 @@ export class VlanService {
      // get all vlan
      async getAllVlans(): Promise<VLAN[]> {
           try {
-               const vlans = await this.vlanRepository.find();
+               const vlans = await this.vlanRepository.find({ relations: ['subnets'] });
                if (vlans.length == 0) {
                     throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
                }
@@ -23,12 +23,35 @@ export class VlanService {
           }
      }
 
+     // search VLAN
+     async searchVLAN(keysearch?: string): Promise<VLAN[]> {
+          try {
+               if (keysearch) {
+                    var VLANs = await this.vlanRepository.find({
+                         where: {
+                              name: `${keysearch}`,
+                         },
+                         relations: ['subnets'],
+                    })
+                    return VLANs;
+               }
+
+               if (VLANs.length === 0) {
+                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               }
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+          }
+     }
+
      // get count 
      async getCount(): Promise<number> {
           return this.vlanRepository.count();
      }
 
-     // get a user with Id
+     // get a VLAN with Id
      async getVlanById(vlanId: number): Promise<VLAN> {
           try {
                const vlan = await this.vlanRepository.findOne(vlanId);
@@ -44,26 +67,44 @@ export class VlanService {
      }
 
 
-     // create user 
+     // create VLAN 
      async createVlan(vlanData: CreateVlanDto): Promise<VLAN> {
           try {
-               const vlan = await this.vlanRepository.save(vlanData);
-               return vlan;
+               const vlan = await this.vlanRepository.findOne({
+                    where: {
+                         name: vlanData.name,
+                         tag: vlanData.tag,
+                    }
+               });
+               if (!vlan) {
+                    await this.vlanRepository.insert(vlanData);
+                    return this.vlanRepository.findOne({
+                         where: {
+                              name: vlanData.name,
+                              tag: vlanData.tag,
+                         },
+                         relations: ['subnets'],
+                    })
+               }
+               throw new HttpException(`Can't create VLAN, VLAN already exists`, HttpStatus.BAD_REQUEST);
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Can't create Vlan`, HttpStatus.BAD_REQUEST);
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 
 
-     // update user
+     // update VLAN
      async updateVlan(vlanId: number, vlanData: UpdateVlanDto): Promise<VLAN> {
           try {
                const vlan = await this.vlanRepository.findOne({ id: vlanId })
                if (vlan) {
                     await this.vlanRepository.update(vlanId, vlanData);
-                    const vlanReturn = await this.vlanRepository.findOne({ id: vlanId })
+                    const vlanReturn = await this.vlanRepository.findOne({
+                         where: { id: vlanId },
+                         relations: ['subnets'],
+                    })
                     return vlanReturn;
                }
                throw new HttpException(`Can't update Vlan`, HttpStatus.BAD_REQUEST);
@@ -74,7 +115,7 @@ export class VlanService {
           }
      }
 
-     // delete user
+     // delete VLAN
      async deleteVlan(vlanId: number): Promise<VLAN> {
           try {
                const vlan = await this.vlanRepository.findOne({ id: vlanId });
