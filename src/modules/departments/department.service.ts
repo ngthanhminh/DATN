@@ -4,7 +4,6 @@ import { UpdateDepartmentDto } from 'src/dtos/updateDepartment.dto';
 import { Department } from 'src/entities/department.entity';
 import { DepartmentRepository } from 'src/repositories/department.repository';
 import { DeviceService } from '../devices/device.service';
-import { Like } from "typeorm";
 
 @Injectable()
 export class DepartmentService {
@@ -24,7 +23,27 @@ export class DepartmentService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+          }
+     }
+
+     // get all device in department  
+     async getAllDevices(departmentId): Promise<Department[]> {
+          try {
+               const departments = await this.departmentRepository.find({
+                    where: {
+                         id: departmentId,
+                    },
+                    relations: ['devices'],
+               });
+               if (departments.length === 0) {
+                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               }
+               return departments;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
@@ -47,7 +66,7 @@ export class DepartmentService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
@@ -62,7 +81,31 @@ export class DepartmentService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+          }
+     }
+
+     // get department [subnet]
+     async getAllDepartmentSubnets(userId: number): Promise<any> {
+          try {
+               const departments = await this.departmentRepository.createQueryBuilder('departments')
+                    .select()
+                    .leftJoinAndSelect("departments.devices", "devices")
+                    .leftJoinAndSelect("departments.subnets", "subnets")
+                    .leftJoinAndSelect("subnets.network", "networks")
+                    .leftJoinAndSelect("subnets.vlan", "vlans")
+                    .leftJoinAndSelect("subnets.devices", "deviceSubnet")
+                    .where('departments.user_id = :id', { id: userId })
+                    .getMany();
+
+               if (departments.length === 0) {
+                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               }
+               return departments;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
@@ -82,34 +125,55 @@ export class DepartmentService {
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
           }
      }
 
      // create Department 
      async createDepartment(departmentData: CreateDepartmentDto): Promise<Department> {
           try {
-               return await this.departmentRepository.save(departmentData);
+               const department = await this.departmentRepository.findOne({
+                    where: {
+                         name: departmentData.name,
+                         location: departmentData.location,
+                    }
+               });
+               if (!department) {
+                    await this.departmentRepository.insert(departmentData);
+                    return this.departmentRepository.findOne({
+                         where: {
+                              name: departmentData.name,
+                              location: departmentData.location,
+                         },
+                         relations: ['user', 'devices'],
+                    })
+               }
+               throw new HttpException(`Can't create Department, Department already exists`, HttpStatus.BAD_REQUEST);
           }
           catch (error) {
                console.log(error);
-               throw new HttpException(`Can't create Department`, HttpStatus.NOT_FOUND);
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 
-     // update Department
+     // update Department with id
      async updateDepartment(departmentId: number, departmentData: UpdateDepartmentDto): Promise<Department> {
           try {
-               const Department = await this.departmentRepository.findOne({ id: departmentId })
+               const Department = await this.departmentRepository.findOne({ where: { id: departmentId } })
                if (Department) {
                     await this.departmentRepository.update(departmentId, departmentData);
-                    return this.departmentRepository.findOne(departmentId);
+                    return this.departmentRepository.findOne({
+                         where: {
+                              id: departmentId,
+                         },
+                         relations: ['user', 'devices'],
+                    });
                }
                throw new HttpException(`Can't update Department`, HttpStatus.BAD_REQUEST);
           }
           catch (error) {
                console.log("Error: ", error);
-               return error;
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 
@@ -118,13 +182,14 @@ export class DepartmentService {
           try {
                const department = await this.departmentRepository.findOne({ id: departmentId });
                if (department) {
-                    const departmentD = await this.departmentRepository.softRemove(department);
+                    const departmentD = await this.departmentRepository.remove(department);
                     return departmentD;
                }
                throw new HttpException(`Can't delete Department`, HttpStatus.BAD_REQUEST);
           }
           catch (error) {
                console.log("Error: ", error);
+               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
           }
      }
 

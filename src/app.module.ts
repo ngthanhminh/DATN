@@ -17,6 +17,7 @@ import { NetworkModule } from './modules/networks/network.module';
 import { SubnetModule } from './modules/subnets/subnet.module';
 import { HeaderMiddleware } from './common/middleware/header.middleware';
 import { CommonModule } from './modules/common/common.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CommonModule } from './modules/common/common.module';
     NetworkModule,
     SubnetModule,
     CommonModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

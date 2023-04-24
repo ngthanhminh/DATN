@@ -15,4 +15,6 @@ export class CreateVlanDto {
      @IsNotEmpty()
      tag: string;
 
+     @IsOptional()
+     decription: string;
 }

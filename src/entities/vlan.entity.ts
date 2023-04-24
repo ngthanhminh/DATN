@@ -33,6 +33,12 @@ export class VLAN {
   })
   tag: string;
 
+  @Column({
+    type: 'varchar',
+    name: 'decription',
+  })
+  decription: string;
+
   @CreateDateColumn({
     name: 'created_at',
   })

@@ -8,6 +8,7 @@ import {
      Body,
      Patch,
      Delete,
+     Query,
 } from '@nestjs/common';
 import { VlanService } from './vlan.service';
 import { VLAN } from 'src/entities/vlan.entity';
@@ -22,6 +23,13 @@ export class VlanController {
      @Get()
      async getAllVlans(): Promise<VLAN[]> {
           return this.vlanService.getAllVlans();
+     }
+
+     @Get('/search')
+     async searchDepartment(
+          @Query('keysearch') keysearch?: string,
+     ): Promise<VLAN[]> {
+          return this.vlanService.searchVLAN(keysearch);
      }
 
      @Get(':id')

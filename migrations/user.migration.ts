@@ -42,6 +42,16 @@ export class user1679908365496 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
+                        name: "email",
+                        type: "varchar",
+                        isNullable: true,
+                    },
+                    {
+                        name: "phone_number",
+                        type: "varchar",
+                        isNullable: true,
+                    },
+                    {
                         name: "created_at",
                         type: "timestamp",
                         default: "now()",

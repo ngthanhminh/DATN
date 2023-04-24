@@ -7,7 +7,8 @@ import {
   Patch,
   Delete,
   ValidationPipe,
-  UsePipes
+  UsePipes,
+  Query
 } from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
 import { UserService } from './user.service';
@@ -22,6 +23,13 @@ export class UserController {
   @Get()
   async getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
+  }
+
+  @Get('/search')
+  async searchDepartment(
+    @Query('keysearch') keysearch?: string,
+  ): Promise<User[]> {
+    return this.userService.searchDepartment(keysearch);
   }
 
   @Get(':id')

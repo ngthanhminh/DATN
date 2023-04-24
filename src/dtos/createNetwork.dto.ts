@@ -7,7 +7,6 @@ import {
      IsNumberString,
      IsEnum,
 } from 'class-validator';
-import { StatusDevice } from 'src/enums/statusDevice.enum';
 
 export class CreateNetworkDto {
      @IsNotEmpty()

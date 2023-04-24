@@ -50,16 +50,9 @@ export class Device {
   @Column({
     type: 'varchar',
     length: 255,
-    name: 'ip_type',
+    name: 'device_type',
   })
-  ip_type: string;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    name: 'ip_expries',
-  })
-  ip_expries: Date;
+  device_type: string;
 
   @Column({
     type: 'int',
