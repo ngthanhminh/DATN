@@ -1,8 +1,22 @@
-import { Controller, UsePipes, ValidationPipe, Get, Post, Patch, Delete, Param, Body, Query } from '@nestjs/common';
+import {
+     Controller,
+     UsePipes,
+     ValidationPipe,
+     Get,
+     Post,
+     Patch,
+     Delete,
+     Param,
+     Body,
+     Query,
+     UseGuards,
+     Request,
+} from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { Department } from 'src/entities/department.entity';
 import { CreateDepartmentDto } from 'src/dtos/createDepartment.dto';
 import { UpdateDepartmentDto } from 'src/dtos/updateDepartment.dto';
+import { JwtAuthGuard } from 'src/guard/auth/jwtAuth.guard';
 
 @UsePipes(ValidationPipe)
 @Controller('department')
@@ -26,11 +40,13 @@ export class DepartmentController {
           return this.departmentService.getAllInfoDepartments();
      }
 
-     @Get('/user/:userId')
+     @UseGuards(JwtAuthGuard)
+     @Get('/user/')
      getAllDepartmentSubnets(
-          @Param('userId') userId: number,
+          @Request() req,
      ): Promise<any> {
-          return this.departmentService.getAllDepartmentSubnets(userId);
+          console.log(req.user);
+          return this.departmentService.getAllDepartmentSubnets(req.user.id);
      }
 
      @Get(':id')

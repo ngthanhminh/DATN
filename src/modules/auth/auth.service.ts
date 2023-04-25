@@ -8,7 +8,6 @@ import { RoleUser } from 'src/enums/roleUser.enum';
 
 @Injectable()
 export class AuthService {
-     private readonly accessTokenExpiresIn = '15m';
      constructor(
           private readonly userService: UserService,
           private readonly jwtService: JwtService,
@@ -16,11 +15,13 @@ export class AuthService {
 
      // generate access token
      async generateAccessToken(payload: any): Promise<string> {
-          return this.jwtService.sign(payload, { expiresIn: this.accessTokenExpiresIn });
+          return this.jwtService.sign(payload);
      }
 
      // verify token 
      async verifyToken(token: string) {
+          console.log(token);
+          console.log(await this.jwtService.verify(token))
           return this.jwtService.verify(token);
      }
 
@@ -28,6 +29,16 @@ export class AuthService {
      async validateUser(username: string, password: string): Promise<any> {
           const user = await this.userService.getUserByUsername(username);
           if (user && PasswordFeature.ComparePassword(password, user.password)) {
+               const { password, ...result } = user;
+               return result;
+          }
+          return null;
+     }
+
+     // validate login jwt
+     async validateUserJwt(username: string): Promise<any> {
+          const user = await this.userService.getUserByUsername(username);
+          if (user) {
                const { password, ...result } = user;
                return result;
           }
