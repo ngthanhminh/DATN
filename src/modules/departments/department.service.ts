@@ -88,6 +88,7 @@ export class DepartmentService {
      // get department [subnet]
      async getAllDepartmentSubnets(userId: number): Promise<any> {
           try {
+               console.log('user id: ', userId);
                const departments = await this.departmentRepository.createQueryBuilder('departments')
                     .select()
                     .leftJoinAndSelect("departments.devices", "devices")

@@ -7,6 +7,9 @@ import { NetworkModule } from '../networks/network.module';
 import { SubnetModule } from '../subnets/subnet.module';
 import { VlanModule } from '../vlans/vlan.module';
 import { UserModule } from '../users/user.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from 'src/constant/auth.constant';
 
 @Module({
   imports: [
@@ -16,6 +19,11 @@ import { UserModule } from '../users/user.module';
     SubnetModule,
     VlanModule,
     UserModule,
+    PassportModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
   controllers: [CommonController],
   providers: [CommonService]
