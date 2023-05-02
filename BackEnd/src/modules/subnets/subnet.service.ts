@@ -5,7 +5,6 @@ import { Subnet } from 'src/entities/subnet.entity';
 import { SubnetRepository } from 'src/repositories/subnet.repository';
 import { NetworkService } from '../networks/network.service';
 import { NetworkFeature } from 'src/utils/network.util';
-import { In } from 'typeorm';
 
 @Injectable()
 export class SubnetService {

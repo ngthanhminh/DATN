@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+     padding: 0;
+     margin: 0;
+}
+
+body {
+     font-family: 'Poppins', sans-serif;
+}
+
+a {
+     text-decoration: none;
+     color: black;
+}
+
+.dashboard {
+     margin: 12px 0px;
+     display: flex;
+     justify-content: center;
+     padding: 40px;
+     padding-top: 0;
+}
+
+.profile {
+     display: flex;
+     flex-direction: column;
+     width: 90%;
+     align-items: center;
+     /* overflow: hidden; */
+}
+
+.profile-image {
+     color: rgb(71 85 105);
+     width: 80px;
+     height: 80px;
+     z-index: 9;
+     background-color: white;
+     border-radius: 50%;
+     border: 15px solid #fff;
+}
+
+.details {
+     padding: 60px 30px 20px 30px;
+     width: 100%;
+     border: 1px solid rgb(203 213 225);
+     border-radius: 10px;
+     margin-top: -50px;
+     display: flex;
+     flex-direction: column;
+}
+
+.field {
+     color: rgb(71 85 105);
+     /* font-size: small; */
+     margin-bottom: -5px;
+}
+
+.font-large {
+     font-size: larger;
+}
+
+.value {
+     font-size: 18px;
+}
+
+.flex-column {
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+}
+
+.flex-row {
+     display: flex;
+     flex-direction: row;
+     justify-content: space-around;
+     gap: 10px
+}
+
+.gap-20 {
+     gap: 70px;
+}
+
+.mb-20 {
+     margin-bottom: 40px;
+}
+
+.mt-40 {
+     margin-top: 40px;
+}
+
+.eid {
+     margin-bottom: 25px;
+     display: flex;
+     flex-direction: row;
+     /* align-items: center; */
+     gap: 10px;
+}
+
+.center {
+     display: flex;
+     justify-content: center;
+}
+
+.font-xxl {
+     font-size: 18px;
+}
+
+.w-270 {
+     width: 270px;
+     overflow-x: scroll
+}
+
+.mb-5 {
+     padding-bottom: 5px;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+     height: 2px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+     background: rgb(229 231 235);
+     border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+     opacity: 200%;
+     cursor: pointer;
+}
+
+.attendance {
+     margin-top: 40px;
+}
+
+.attendance a {
+     width: 80px;
+     background-color: #3872b2;
+     color: #fff;
+     text-align: center;
+}
+
+.attendance a:hover {
+     cursor: pointer;
+     color: black;
+     background-color: lightgrey;
+}
+
+.name {
+     text-align: center;
+     font-size: 24px;
+}
