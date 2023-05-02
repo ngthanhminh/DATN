@@ -107,8 +107,9 @@ function LoadFormCaculateSubnet() {
      // add content to iframe 
      createForm.html(`
                     <div class="flex-column">
-                         <h3>Ip Network</h3>
-                         <input type="text" name="ipNetwork" id="ipNetwork" value="" placeholder="Enter ip network..." />
+                         <h3>Network</h3>
+                         <select id="network">
+                         </select>
                     </div>
                     <div class="flex-column">
                          <h3>Number subnet</h3>
@@ -121,9 +122,26 @@ function LoadFormCaculateSubnet() {
                     </div>
                `)
 
+
+     $.ajax({
+          url: `http://localhost:3000/network/available`,
+          type: "GET",
+          dataType: "json",
+          success: function (data) {
+               // console.log(data);
+               data.forEach((network, ind) => {
+                    $(iframe).find('select#network').append(` <option value="network ${ind + 1}" selected>${network.network_address}</option>`)
+               })
+               $(iframe).find('select#network').prop('selectedIndex', -1);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+               console.log(textStatus + ": " + errorThrown);
+          }
+     });
+
      // add event checkIP
      $(iframe).find('#submit').click(function () {
-          const ipNetwork = $(iframe).find('#ipNetwork').val();
+          const ipNetwork = $(iframe).find('#network').find(':selected').text();;
           const numSubnets = $(iframe).find('#number').val();
 
           CaculateSubnet(ipNetwork, numSubnets);

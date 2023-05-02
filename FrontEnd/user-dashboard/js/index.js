@@ -100,8 +100,9 @@ $(function () {
 
           // 
           $('.category').click(function () {
-               $('.category').css('color', '#cacaca');
+               $('.category').css('color', '#474747');
                $(this).css('color', '#337ab7');
+               $(this).siblings().css('color', '#337ab7');
 
                const departmentName = $(this).text();
                const department = departments.find((department) => { return department.name == departmentName });

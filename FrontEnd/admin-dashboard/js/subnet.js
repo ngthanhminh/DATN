@@ -367,7 +367,7 @@ function LoadContent(data) {
           let subnetAddress = $(this).parent().siblings().eq(0).text();
           const subnet = subnets.find((subnet) => { return subnet.subnet_address == subnetAddress })
 
-          loadFormUpdate(subnet.name, subnet.subnet_address, subnet.subnet_mask, subnet.permission, subnet.decription, subnet.department.name, subnet.network.name, subnet.vlan.name);
+          loadFormUpdate(subnet.name, subnet.subnet_address, subnet.subnet_mask, subnet.permission, subnet.decription, subnet?.department?.name || '', subnet.network.name, subnet?.vlan?.name || '');
 
           $('#iframe-container-create').fadeIn();
           $('#iframe-container-detail #close-iframe-btn').click(function () {
