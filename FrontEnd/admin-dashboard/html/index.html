@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../styles/style.css" type="text/css">
+  <link rel="stylesheet" href="../styles/profile.css" type="text/css">
+  <title>Admin Area | Dashboard</title>
+</head>
+
+<body>
+  <nav>
+    <!-- <div class="container">
+      <div class="left">
+        <ul>
+          <li><span class="adminbrand">Admin</span></li>
+          <li class="current"><a href="index.html">Dashboard</a></li>
+          <li><a href="pages.html">Departments</a></li>
+          <li><a href="posts.html">Networks</a></li>
+          <li><a href="users.html">VLAN</a></li>
+          <li><a href="users.html">Subnets</a></li>
+          <li><a href="users.html">Devices</a></li>
+          <li><a href="users.html">Users</a></li>
+        </ul>
+      </div>
+      <div class="right">
+        <ul>
+          <!-- <li><a href="#">Welcome, Sheky</a></li> -->
+    <!-- <li><a href="./login.html">Logout</a></li>
+    </ul>
+    </div>
+    </div> -->
+  </nav>
+
+  <header>
+    <div class="container">
+      <div class="left">
+        <h1><span><i class="fas fa-cog" style="color: white;"></i> Dashboard</span><small> Manage Network</small></h1>
+      </div>
+      <div class="right">
+        <button class="dropdown" id="create-new-btn">Create Content</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="breadcrumb">
+      <div>Dashboard</div>
+    </section>
+  </div>
+
+  <div class="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-3">
+          <div class="link">
+            <div class="category-header" href="index.html" class="red"
+              style="color: white; background-color: #3872b2; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+              <i class="fas fa-cog" style="color: white;"></i>
+              Dashboard
+            </div>
+            <div class="category" id="department"><i class="fas fa-file-alt"></i> Department <span
+                class="badge badge-department">0</span></div>
+            <div class="category" id="network"><i class="fas fa-pencil-alt"></i> Network <span
+                class="badge badge-network">0</span>
+            </div>
+            <div class="category" id="VLAN"><i class="fas fa-pencil-alt"></i> VLAN <span
+                class="badge badge-VLAN">0</span></div>
+            <div class="category" id="subnet"><i class="fas fa-pencil-alt"></i> Subnet <span
+                class="badge badge-subnet">0</span>
+            </div>
+            <div class="category" id="device"><i class="fas fa-pencil-alt"></i> Device <span
+                class="badge badge-device">0</span>
+            </div>
+            <div class="category" id="user"><i class="fas fa-pencil-alt"></i> User <span
+                class="badge badge-user">0</span></div>
+          </div>
+
+          <div class="progress">
+            <div class="category" id="profile"><i class="fas fa-pencil-alt"></i> Profile </div>
+            <div class="category" id="logout"><i class="fas fa-pencil-alt"></i> Logout </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="overview">
+          <div class="overview-top red">
+            <span>Website Overview </span>
+          </div>
+          <div class="overview-bottom">
+            <div class="card">
+              <h3 class="badge-department"><i class="fas fa-user"> </i> 0</h3>
+              <p>Departments</p>
+            </div>
+            <div class="card">
+              <h3 class="badge-user"><i class="fas fa-file-alt"></i> 0</h3>
+              <p>Users</p>
+            </div>
+            <div class="card">
+              <h3 class="badge-network"><i class="fas fa-pencil-alt"></i> 0</h3>
+              <p>Networks</p>
+            </div>
+            <div class="card">
+              <h3 class="badge-VLAN"><i class="fas fa-chart-line"></i> 0</h3>
+              <p>VLANs</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="latest">
+          <div class=" cate">Latest Users</div>
+          <div class="latest-bottom">
+            <table>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Joined</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <footer>
+    <p>Copyright AdminStrap, © 2018</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script src="../js/index.js"></script>
+</body>
+
+</html>

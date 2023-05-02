@@ -29,7 +29,7 @@ export class UserController {
   async searchDepartment(
     @Query('keysearch') keysearch?: string,
   ): Promise<User[]> {
-    return this.userService.searchDepartment(keysearch);
+    return this.userService.searchUser(keysearch);
   }
 
   @Get(':id')

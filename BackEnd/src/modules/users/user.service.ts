@@ -25,15 +25,14 @@ export class UserService {
     }
   }
 
-  // search department
-  async searchDepartment(keysearch?: string): Promise<User[]> {
+  // search user
+  async searchUser(keysearch?: string): Promise<User[]> {
     try {
       if (keysearch) {
         var user = await this.userRepository.find({
           where: {
             name: `${keysearch}`,
           },
-          relations: ['user', 'devices'],
         })
         return user;
       }

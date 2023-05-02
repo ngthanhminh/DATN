@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+    <title>Manage Network</title>
+    <link rel="stylesheet" href="../css/adminStyle.css">
+    <script src="https://kit.fontawesome.com/621f081124.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Admin dashboard</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="#" class="profile" id="profile">Profile</a></li>
+                    <li class="active"><a href="#" class="tool"><i class="fa fa-tachometer" aria-hidden="true"></i> Tool
+                            <span class="sr-only">(current)</span></a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" id="logout"><i class="fa fa-files-o" aria-hidden="true"></i>
+                            Logout</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4 col-md-3 sidebar">
+                <ul class="nav nav-sidebar" id="departments">
+                </ul>
+            </div>
+            <div class="col-sm-8 col-md-9 main">
+                <h1 class="page-header">Tools</h1>
+                <div class="row placeholders">
+                    <div class="col-xs-12 custom-col placeholder button" id="checkIP">
+                        <h1><i class="fa-solid fa-square-check"></i></h1>
+                        <h4>Check IP</h4>
+                        <p>Check if the ip address is already in use...</p>
+                    </div>
+                    <div class="col-xs-12 custom-col placeholder button" id="caculateSubnet">
+                        <h1><i class="fa-solid fa-calculator"></i></h1>
+                        <h4>Subnet calculation</h4>
+                        <p>Divide network addresses into subnets</p>
+                    </div>
+                    <div class="col-xs-12 custom-col placeholder button" id="useSubnet">
+                        <h1><i class="fa-solid fa-folder-plus"></i></h1>
+                        <h4>Use Subnet</h4>
+                        <p>Registry subnet for department.</p>
+                    </div>
+                    <div class="col-xs-12 custom-col placeholder button" id="getIpAddress">
+                        <h1><i class="fa-solid fa-magnifying-glass"></i></i></h1>
+                        <h4>Get Ip Address</h4>
+                        <p>Get ready IP address.</p>
+                    </div>
+                </div>
+                <h1 class="sub-header space">Departments</h1>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Subnets</th>
+                                <th>Devices</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/subnet.js"></script>
+    <script src="../js/network.js"></script>
+    <script src="../js/vlan.js"></script>
+    <script src="../js/tool.js"></script>
+    <script src="../js/profile.js"></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+</body>
+
+</html>

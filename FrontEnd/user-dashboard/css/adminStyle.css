@@ -1,0 +1,254 @@
+body {
+    font-family: 'Exo 2', sans-serif;
+    background-color: #1a1a1a;
+    color: #cacaca;
+}
+
+li {
+    list-style-type: none;
+}
+
+strong {
+    margin-right: 10px;
+}
+
+.department a {
+    color: #cacaca;
+    text-decoration: none;
+}
+
+.category::before {
+    content: '';
+    display: none;
+    width: 20px;
+    height: 10px;
+    position: absolute;
+    border-radius: 4px;
+    /* background-color: red; */
+    right: 10px;
+    top: 12px;
+}
+
+.category:hover::before {
+    display: block;
+    background-color: #28689f;
+}
+
+.department {
+    margin-bottom: 30px;
+}
+
+.department li:first-of-type {
+    padding-top: 10px;
+    padding-left: 34px;
+}
+
+.department li {
+    color: #cacaca;
+    padding-top: 15px;
+    padding-left: 34px;
+}
+
+.subnet:hover {
+    cursor: pointer;
+    color: #28689f;
+}
+
+.category:hover {
+    cursor: pointer;
+}
+
+.nav-sidebar li ul {
+    padding-left: 0;
+}
+
+.nav-sidebar {
+    margin: 76px 26px 20px 20px;
+    overflow: auto;
+    border-right: 1px solid #474747;
+}
+
+.nav-sidebar>li>ul>a {
+    display: block;
+    padding: 5px;
+}
+
+.nav-sidebar>li>ul>a:hover {
+    cursor: pointer;
+    background-color: #cacaca;
+}
+
+.main {
+    margin-top: 50px;
+    padding: 20px;
+    padding-right: 40px;
+}
+
+.placeholders {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.placeholder {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.placeholder img {
+    display: inline;
+    border-radius: 50%;
+}
+
+.space {
+    margin-top: 100px;
+}
+
+.button {
+    height: 200px;
+    background-color: #28689f;
+    color: #cacaca;
+    padding: 12px 24px;
+    margin: 1%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.button:hover {
+    color: #333;
+    background-color: #cacaca;
+}
+
+.custom-col {
+    /* background-color: #f7f7f7; */
+    width: 23%;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.category {
+    font-size: 18px;
+    font-weight: bold;
+    color: #cacaca;
+}
+
+.category:hover {
+    color: #28689f !important;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+h1 i {
+    font-size: 40px;
+}
+
+.button h4 {
+    font-weight: bold;
+}
+
+table th {
+    font-size: 16px;
+    border-bottom: none !important;
+}
+
+.ips {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ips td {
+    width: 34px;
+    text-align: center;
+    margin-left: 6px;
+    margin-bottom: 6px;
+    color: #cacaca;
+    background-color: #333;
+    border-top: none !important;
+    border-radius: 4px;
+}
+
+.ips td:hover {
+    cursor: pointer;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: transparent;
+    border: none;
+}
+
+.table-striped>tbody>tr>td {
+    border-top: none;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #474747;
+}
+
+.navbar-inverse {
+    background-color: #222;
+    border-color: #474747;
+}
+
+.page-header {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #474747;
+}
+
+/* iframe */
+#iframe-container-update,
+#iframe-container-create {
+    position: fixed;
+    top: 24%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    z-index: 9999;
+    background-color: #fff;
+    width: 60%;
+    height: 90%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 30px 60px;
+    display: none;
+    /* opacity: 0; */
+}
+
+#user-form-iframe {
+    width: 100%;
+    height: 80%;
+    border: none;
+}
+
+#close-iframe-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: #e74c3c;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+}
+
+.assigned {
+    background-color: #28689f !important;
+}
+
+#edit {
+    margin-top: 20px;
+    padding: 4px;
+    width: 100px;
+    color: #fff;
+    background-color: #28689f;
+    border: 1px solid #474747;
+    border-radius: 4px;
+}
+
+#edit:hover {
+    color: #333;
+    background-color: #cacaca;
+}
