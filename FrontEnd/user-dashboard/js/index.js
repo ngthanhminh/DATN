@@ -32,7 +32,7 @@ $(function () {
      // logout 
      $('#logout').click(function () {
           setAccessTokenCookie('access_token', '');
-          window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/login.html';
+          window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/html/login.html';
      })
 
      // event click tool
@@ -56,7 +56,7 @@ $(function () {
           error: function (jqXHR, textStatus, errorThrown) {
                console.log(textStatus + ": " + errorThrown);
                if (jqXHR.status == 401) {
-                    window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/login.html';
+                    window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/html/login.html';
                }
           }
      });

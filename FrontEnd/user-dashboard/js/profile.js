@@ -150,7 +150,7 @@ function loadFormUpdate(user) {
 function LoadUserProfile() {
      $('.main').empty();
      $('.main').append(`
-                    <h1 class="page-header">Detail</h1>
+                    <h1 class="page-header">Profile</h1>
                     <div class="detail">
                          <p><strong>Name :</strong>${user?.name || ''}</p>
                          <p><strong>Username :</strong>${user?.username || ''}</p>
