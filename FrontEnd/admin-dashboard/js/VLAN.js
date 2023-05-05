@@ -218,7 +218,7 @@ function LoadContent(data) {
      // add event delete 
      $('.del-VLAN').click(function () {
           const VLANTag = $(this).parent().siblings().eq(1).text();
-          const VLAN = VLANs.find((VLAN) => { return VLAN.VLAN_address == VLANTag })
+          const VLAN = VLANs.find((VLAN) => { return VLAN.tag == VLANTag })
           if (window.confirm(`Delete VLAN ${VLAN.name} ?`)) {
                deleteVLAN($(this).parent().parent(), VLAN.id);
           }
