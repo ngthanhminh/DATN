@@ -313,7 +313,7 @@ async function loadFormUpdate(id, name, ipAddress, macAddress, deviceType, decri
      // add subnet in department to form
      $(iframe).find('select#subnet').empty()
      subnetsInDepartment.forEach((subnet, index) => {
-          $(iframe).find('select#subnet').append(`<option value="${subnet.id}">${subnet.name}</option>`)
+          $(iframe).find('select#subnet').append(`<option value="${subnet.id}">${subnet.subnet_address}</option>`)
      })
 
      $(iframe).find('select#subnet').find('option').filter(function () {
@@ -326,7 +326,7 @@ async function loadFormUpdate(id, name, ipAddress, macAddress, deviceType, decri
 
           $(iframe).find('select#subnet').empty()
           subnetsInDepartment.forEach((subnet, index) => {
-               $(iframe).find('select#subnet').append(`<option value="${subnet.id}">${subnet.name}</option>`)
+               $(iframe).find('select#subnet').append(`<option value="${subnet.id}">${subnet.subnet_address}</option>`)
           })
      })
 
@@ -341,7 +341,8 @@ async function loadFormUpdate(id, name, ipAddress, macAddress, deviceType, decri
           const departmentId = $(iframe).find('#department').find(':selected').val();
           const subnetId = $(iframe).find('#subnet').find(':selected').val();
 
-          const device = devices.find((device) => { return device.ip_address == ipAddress })
+          const device = devices.find((device) => { return device.mac_address == macAddress })
+
           updatedevice(device.id, name, ipAddress, macAddress, decription, deviceType, departmentId, subnetId);
      });
 
@@ -373,7 +374,7 @@ function LoadContent(data) {
           let ipAddress = $(this).parent().siblings().eq(1).text();
           const device = devices.find((device) => { return device.ip_address == ipAddress })
           const departmentName = device.department?.name ?? '';
-          const subnetName = device.subnet?.name ?? '';
+          const subnetName = device.subnet?.subnet_address ?? '';
 
           await loadFormUpdate(device.id, device.name, device.ip_address, device.mac_address, device.device_type, device.decription, departmentName, subnetName);
 

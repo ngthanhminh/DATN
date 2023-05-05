@@ -25,6 +25,26 @@ export class NetworkService {
           }
      }
 
+     // get all Network avairable to caculate subnet
+     async getNetworksAvailable(): Promise<Network[]> {
+          try {
+               let networkAvailable = [];
+               const Networks = await this.networkRepository.find({
+                    relations: ['subnets'],
+               });
+               Networks.forEach((network) => {
+                    if (network.subnets.length === 0) {
+                         networkAvailable.push(network);
+                    }
+               })
+               return networkAvailable;
+          }
+          catch (error) {
+               console.log(error);
+               throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+          }
+     }
+
      // search network
      async searchNetwork(keysearch?: string): Promise<Network[]> {
           try {

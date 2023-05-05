@@ -48,6 +48,7 @@ a {
      margin-top: -50px;
      display: flex;
      flex-direction: column;
+     background-color: #fff;
 }
 
 .field {

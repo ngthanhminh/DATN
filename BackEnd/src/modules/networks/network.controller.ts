@@ -33,6 +33,12 @@ export class NetworkController {
           return this.networkService.searchNetwork(keysearch);
      }
 
+     @Get('/available')
+     async getNetworksAvailable(
+     ): Promise<Network[]> {
+          return this.networkService.getNetworksAvailable();
+     }
+
      @Get(':id')
      async getNetwork(
           @Param('id', ParseIntPipe) id: number,

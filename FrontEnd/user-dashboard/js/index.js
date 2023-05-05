@@ -32,7 +32,7 @@ $(function () {
      // logout 
      $('#logout').click(function () {
           setAccessTokenCookie('access_token', '');
-          window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/login.html';
+          window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/html/login.html';
      })
 
      // event click tool
@@ -56,7 +56,7 @@ $(function () {
           error: function (jqXHR, textStatus, errorThrown) {
                console.log(textStatus + ": " + errorThrown);
                if (jqXHR.status == 401) {
-                    window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/login.html';
+                    window.location.href = 'http://127.0.0.1:5500/FrontEnd/common/html/login.html';
                }
           }
      });
@@ -100,8 +100,9 @@ $(function () {
 
           // 
           $('.category').click(function () {
-               $('.category').css('color', '#cacaca');
+               $('.category').css('color', '#474747');
                $(this).css('color', '#337ab7');
+               $(this).siblings().css('color', '#337ab7');
 
                const departmentName = $(this).text();
                const department = departments.find((department) => { return department.name == departmentName });

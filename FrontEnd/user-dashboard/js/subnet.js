@@ -141,6 +141,7 @@ function LoadMessage(message, subnetId) {
      // add event close form
      $('#iframe-container-create #close-iframe-btn').click(function () {
           $('#iframe-container-create').fadeOut();
+          getSubnetById(subnetId);
      });
 }
 
@@ -156,9 +157,6 @@ function assignIpAddress(deviceId, ipAddress, subnetId) {
           success: function (data) {
                const message = `<p>Assigned ip address: ${data.ip_address} for device: ${data.name}</p>`;
                LoadMessage(message, subnetId);
-               setTimeout(function () {
-                    getSubnetById(subnetId);
-               }, 3000);
           },
           error: function (xhr, textStatus, errorThrown) {
                var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
