@@ -35,7 +35,7 @@ $('#profile').click(function () {
                LoadUserProfile(user);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -79,7 +79,7 @@ function updateUser(id, name, username, password, address, email, phoneNumber) {
                LoadUserProfile(user);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });

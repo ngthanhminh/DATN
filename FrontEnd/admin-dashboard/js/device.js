@@ -14,8 +14,9 @@ $.ajax({
      success: function (data) {
           departments = data;
      },
-     error: function (jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ": " + errorThrown);
+     error: function (xhr, textStatus, errorThrown) {
+          var errorMessage = `${xhr.responseJSON.message}`;
+          alert(`Error Message: ${errorMessage}`);
      }
 });
 
@@ -28,8 +29,9 @@ $.ajax({
      success: function (data) {
           subnets = data;
      },
-     error: function (jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ": " + errorThrown);
+     error: function (xhr, textStatus, errorThrown) {
+          var errorMessage = `${xhr.responseJSON.message}`;
+          alert(`Error Message: ${errorMessage}`);
      }
 });
 
@@ -43,8 +45,9 @@ async function LoadSubnetInDepartment(departmentId) {
           success: function (data) {
                subnetsInDepartment = data;
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }
@@ -84,7 +87,7 @@ function createdevice(name, ipAddress, macAddress, decription, deviceType, depar
                LoadContent(devices);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -118,7 +121,7 @@ function updatedevice(deviceId, name, ipAddress, macAddress, decription, deviceT
                LoadContent(devices);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -141,7 +144,7 @@ function deletedevice(deviceContext, deviceId) {
                });
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -410,8 +413,9 @@ function search() {
                     success: function (data) {
                          LoadContent(data);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                         console.log(textStatus + ": " + errorThrown);
+                    error: function (xhr, textStatus, errorThrown) {
+                         var errorMessage = `${xhr.responseJSON.message}`;
+                         alert(`Error Message: ${errorMessage}`);
                     }
                });
           }
@@ -465,8 +469,9 @@ function LoadPage() {
                     search();
                })
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 

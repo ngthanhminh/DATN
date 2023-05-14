@@ -12,8 +12,9 @@ $.ajax({
      success: function (data) {
           users = data;
      },
-     error: function (jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ": " + errorThrown);
+     error: function (xhr, textStatus, errorThrown) {
+          var errorMessage = `${xhr.responseJSON.message}`;
+          alert(`Error Message: ${errorMessage}`);
      }
 });
 
@@ -48,7 +49,7 @@ function createDepartment(name, location, userId) {
                LoadContent(departments);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -79,7 +80,7 @@ function updateDepartment(departmentId, name, location, userId) {
                LoadContent(departments);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -102,7 +103,7 @@ function deleteDepartment(departmentContext, departmentId) {
                });
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -272,8 +273,9 @@ function search() {
                     success: function (data) {
                          LoadContent(data);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                         console.log(textStatus + ": " + errorThrown);
+                    error: function (xhr, textStatus, errorThrown) {
+                         var errorMessage = `${xhr.responseJSON.message}`;
+                         alert(`Error Message: ${errorMessage}`);
                     }
                });
           }
@@ -327,8 +329,9 @@ function LoadPage() {
                     search();
                })
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 

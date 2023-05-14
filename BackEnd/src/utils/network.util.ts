@@ -1,5 +1,60 @@
 export class NetworkFeature {
 
+     // Kiem tra dinh dang dia chi IP
+     static isValidIPAddress(IP: string): boolean {
+          const pattern =
+               "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+          return new RegExp(pattern).test(IP);
+     }
+
+     // Kiem tra dinh dang cua dia chi subnet 
+     static isValidSubnet(subnet: string): boolean {
+          const subnetParts = subnet.split(".");
+          if (subnetParts.length !== 4) {
+               return false;
+          }
+
+          for (let i = 0; i < 4; i++) {
+               const part = parseInt(subnetParts[i]);
+
+               if (isNaN(part) || part < 0 || part > 255) {
+                    return false;
+               }
+          }
+
+          return true;
+     }
+
+     // Kiem tra dinh dang CIDR cua subnet 
+     static isValidCIDR(cidr: string): boolean {
+          const parts = cidr.split("/");
+          if (parts.length !== 2) {
+               return false;
+          }
+
+          const subnet = parts[0];
+          const prefix = parseInt(parts[1]);
+
+          if (isNaN(prefix) || prefix < 0 || prefix > 32) {
+               return false;
+          }
+
+          if (!this.isValidSubnet(subnet)) {
+               return false;
+          }
+
+          const subnetParts = subnet.split(".");
+          let addr = 0;
+          for (let i = 0; i < 4; i++) {
+               addr <<= 8;
+               addr += Number(subnetParts[i]);
+          }
+
+          const bitmask = ((1 << prefix) - 1) << (32 - prefix);
+          return (addr & bitmask) === addr;
+     }
+
+     // 
      ipV4ToNum(ipAddress: string): number {
           // Tách các octet của địa chỉ IP thành các phần tử của một mảng số nguyên
           const parts = ipAddress.split('.').map(Number);
@@ -200,6 +255,39 @@ export class NetworkFeature {
           }
 
           return ipAddresses;
+     }
+
+     // Lay danh sách dia chi IP hop le tu mot dia chi mang
+     static getValidIPAddresses(networkAddress: string, prefixLength: number): string[] {
+          const subnetBits = 32 - prefixLength;
+          const hostCount = Math.pow(2, subnetBits);
+          const startAddress = this.ip2long(networkAddress);
+          const endAddress = startAddress + hostCount - 1;
+
+          const validIPs = [];
+
+          for (let i = startAddress + 1; i <= endAddress - 1; i++) {
+               validIPs.push(this.long2ip(i));
+          }
+
+          return validIPs;
+     }
+
+     static ip2long(ip: string) {
+          const parts = ip.split(".");
+          let long = 0;
+          for (let i = 0; i < 4; i++) {
+               long += parseInt(parts[i]) << (8 * (3 - i));
+          }
+          return long >>> 0; // convert to unsigned
+     }
+
+     static long2ip(long: number) {
+          const part1 = (long >>> 24) & 255;
+          const part2 = (long >>> 16) & 255;
+          const part3 = (long >>> 8) & 255;
+          const part4 = long & 255;
+          return part1 + "." + part2 + "." + part3 + "." + part4;
      }
 
 }

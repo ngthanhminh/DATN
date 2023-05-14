@@ -1,12 +1,17 @@
+import { SubnetService } from './../subnets/subnet.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateDeviceDto } from 'src/dtos/createDevice.dto';
 import { UpdateDeviceDto } from 'src/dtos/updateDevice.dto';
 import { Device } from 'src/entities/device.entity';
 import { DeviceRepository } from 'src/repositories/device.repository';
+import { NetworkFeature } from '../../utils/network.util';
 
 @Injectable()
 export class DeviceService {
-     constructor(private readonly deviceRepository: DeviceRepository) { }
+     constructor(
+          private readonly deviceRepository: DeviceRepository,
+          private readonly subnetService: SubnetService,
+     ) { }
 
      // get all Device 
      async getAllDevices(): Promise<Device[]> {
@@ -74,54 +79,58 @@ export class DeviceService {
      }
 
      // check IP address
-     async checkIpAddress(ipAddress: string): Promise<boolean> {
-          try {
-               const device = await this.deviceRepository.findOne({
-                    where: {
-                         ip_address: ipAddress,
-                    }
-               });
-               if (!device) {
-                    return false;
+     async checkIpAddress(ipAddress: string, departmentId: string, subnetId: string): Promise<boolean> {
+          const ips = await this.subnetService.getIPAddressSubnet(Number(subnetId));
+          if (!ips.includes(ipAddress)) {
+               throw new HttpException(`Invalid IP address`, HttpStatus.BAD_REQUEST);
+          }
+          if (!NetworkFeature.isValidIPAddress(ipAddress)) {
+               throw new HttpException(`Invalid IP address`, HttpStatus.BAD_REQUEST);
+          }
+          const device = await this.deviceRepository.findOne({
+               where: {
+                    ip_address: ipAddress,
                }
-               return true;
+          });
+          if (!device) {
+               return false;
           }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
-          }
+          return true;
      }
 
      // create Device 
      async createDevice(deviceData: CreateDeviceDto): Promise<Device> {
-          try {
-               const device = await this.deviceRepository.findOne({
+          const subnet = await this.subnetService.getSubnetById(deviceData.subnet_id);
+          const networkFeature = new NetworkFeature();
+          const ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
+          if (!ips.includes(deviceData.ip_address)) {
+               throw new HttpException(`Ip address is not invalid`, HttpStatus.BAD_REQUEST);
+          }
+          const device = await this.deviceRepository.findOne({
+               where: {
+                    ip_address: deviceData.ip_address,
+                    mac_address: deviceData.mac_address,
+               }
+          });
+          if (!device) {
+               await this.deviceRepository.insert(deviceData);
+               return this.deviceRepository.findOne({
                     where: {
                          ip_address: deviceData.ip_address,
                          mac_address: deviceData.mac_address,
-                    }
-               });
-               if (!device) {
-                    await this.deviceRepository.insert(deviceData);
-                    return this.deviceRepository.findOne({
-                         where: {
-                              ip_address: deviceData.ip_address,
-                              mac_address: deviceData.mac_address,
-                         },
-                         relations: ['department', 'subnet'],
-                    })
-               }
-               throw new HttpException(`Can't create device, device already exists`, HttpStatus.BAD_REQUEST);
+                    },
+                    relations: ['department', 'subnet'],
+               })
           }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-          }
+          throw new HttpException(`Can't create device, device already exists`, HttpStatus.BAD_REQUEST);
      }
 
      // update Device
      async updateDevice(deviceId: number, deviceData: UpdateDeviceDto): Promise<Device> {
-          try {
+          if (deviceData.ip_address) {
+               if (!NetworkFeature.isValidIPAddress(deviceData.ip_address)) {
+                    throw new HttpException(`Ip address is not valid`, HttpStatus.BAD_REQUEST);
+               }
                const device = await this.deviceRepository.findOne({ id: deviceId })
                if (device) {
                     await this.deviceRepository.update(deviceId, deviceData);
@@ -134,40 +143,28 @@ export class DeviceService {
                }
                throw new HttpException(`Can't update Device`, HttpStatus.BAD_REQUEST);
           }
-          catch (error) {
-               console.log("Error: ", error);
-               return error;
-          }
      }
 
      // delete Device
      async deleteDevice(deviceId: number): Promise<Device> {
-          try {
-               const device = await this.deviceRepository.findOne({ id: deviceId });
-               if (device) {
-                    const deviceD = await this.deviceRepository.softRemove(device);
-                    return deviceD;
-               }
-               throw new HttpException(`Can't delete Device`, HttpStatus.BAD_REQUEST);
+          const device = await this.deviceRepository.findOne({ id: deviceId });
+          if (device) {
+               const deviceD = await this.deviceRepository.softRemove(device);
+               return deviceD;
           }
-          catch (error) {
-               console.log("Error: ", error);
-          }
+          throw new HttpException(`Can't delete Device`, HttpStatus.BAD_REQUEST);
      }
 
      // update id of device
      async updateIdOfDevice(macAddress: string, ipAddress: string): Promise<Device> {
-          try {
-               const device = await this.deviceRepository.findOne({ mac_address: macAddress })
-               if (device) {
-                    device.ip_address = ipAddress;
-                    return this.deviceRepository.save(device);
-               }
-               throw new HttpException(`Can't assign ip for Device`, HttpStatus.BAD_REQUEST);
+          if (!NetworkFeature.isValidIPAddress(ipAddress)) {
+               throw new HttpException(`Ip address is not valid`, HttpStatus.BAD_REQUEST);
           }
-          catch (error) {
-               console.log("Error: ", error);
-               return error;
+          const device = await this.deviceRepository.findOne({ mac_address: macAddress })
+          if (device) {
+               device.ip_address = ipAddress;
+               return this.deviceRepository.save(device);
           }
+          throw new HttpException(`Can't assign ip for Device`, HttpStatus.BAD_REQUEST);
      }
 }

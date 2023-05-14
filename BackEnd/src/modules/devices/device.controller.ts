@@ -24,8 +24,10 @@ export class DeviceController {
      @Get('/checkIP')
      async checkIpAddress(
           @Query('ip_address') ipAddress?: string,
+          @Query('department_id') departmentId?: string,
+          @Query('subnet_id') subnetId?: string,
      ): Promise<boolean> {
-          return this.deviceService.checkIpAddress(ipAddress);
+          return this.deviceService.checkIpAddress(ipAddress, departmentId, subnetId);
      }
 
      @Get(':id')

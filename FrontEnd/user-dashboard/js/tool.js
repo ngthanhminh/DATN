@@ -19,13 +19,15 @@ function LoadMessageTool(message) {
      });
 }
 
-function checkIP(ipAddress) {
+function checkIP(ipAddress, deparmentId, subnetId, departments) {
      $.ajax({
           url: `http://localhost:3000/device/checkIP`,
           type: "GET",
           dataType: "json",
           data: {
                ip_address: ipAddress,
+               deparment_id: deparmentId,
+               subnet_id: subnetId,
           },
           success: function (data) {
                let message;
@@ -37,13 +39,16 @@ function checkIP(ipAddress) {
                }
                LoadMessageTool(message);
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
+               LoadFormCheckIP(departments);
           }
      });
 }
 
-function LoadFormCheckIP() {
+function LoadFormCheckIP(departments) {
+     console.log(departments)
      let iframe = $("#iframe-container-create > #user-form-iframe").contents().get(0)
      let createForm = $(iframe).find('form#create-form')
 
@@ -52,6 +57,16 @@ function LoadFormCheckIP() {
 
      // add content to iframe 
      createForm.html(`
+                    <div class="flex-column">
+                         <h3>Department</h3>
+                         <select id="department">
+                         </select>
+                    </div>
+                    <div class="flex-column">
+                         <h3>Subnet</h3>
+                         <select id="subnet">
+                         </select>
+                    </div>
                     <div class="flex-column">
                          <h3>Ip Address</h3>
                          <input type="text" name="ipAddress" id="ipAddress" value="" placeholder="Enter ip address..." />
@@ -62,11 +77,26 @@ function LoadFormCheckIP() {
                          </button>
                     </div>
                `)
+     departments.forEach((department, index) => {
+          $(iframe).find('select#department').append(`<option value="${department.id}">${department.name}</option>`)
+     })
+     $(iframe).find('select#department').prop('selectedIndex', -1);
+
+     $(iframe).find('select#department').change(function () {
+          const departmentId = $(this).find(':selected').val();
+          const department = departments.find((department) => { return department.id == departmentId });
+          department.subnets.forEach((subnet, index) => {
+               $(iframe).find('select#subnet').append(`<option value="${subnet.id}">${subnet.subnet_address}</option>`)
+          })
+          $(iframe).find('select#subnet').prop('selectedIndex', -1);
+     })
 
      // add event checkIP
      $(iframe).find('#submit').click(function () {
           const ipAddress = $(iframe).find('#ipAddress').val();
-          checkIP(ipAddress);
+          const departmentId = $(iframe).find('#department').find(':selected').val();
+          const subnetId = $(iframe).find('#subnet').find(':selected').val();
+          checkIP(ipAddress, departmentId, subnetId, departments);
 
           LoadMessageTool()
      })
@@ -91,8 +121,10 @@ function CaculateSubnet(ipNetwork, numSubnets) {
                })
                LoadMessageTool(message);
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
+               LoadFormCaculateSubnet();
           }
      });
 }
@@ -134,8 +166,9 @@ function LoadFormCaculateSubnet() {
                })
                $(iframe).find('select#network').prop('selectedIndex', -1);
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 
@@ -163,8 +196,9 @@ function RegistrySubnet(departmentId, departmentName, subnetId) {
                let message = `<h3>Subnet ${data.subnet_address} used by ${departmentName}</h3>`;
                LoadMessageTool(message);
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }
@@ -211,8 +245,9 @@ function LoadFormRegistrySubnet(departments) {
                })
                $(iframe).find('select#subnet').prop('selectedIndex', -1);
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 
@@ -240,8 +275,9 @@ function GetIpAddress(subnetId) {
                let message = `<h2>Ip address:  ${data.ip}</h2>`;
                LoadMessageTool(message);
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }
@@ -293,8 +329,9 @@ function LoadFormGetIpAddress(departments) {
                          $(iframe).find('select#subnet').append(` <option value="subnet ${ind + 1}" selected>${subnet.subnet_address}</option>`)
                     })
                },
-               error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus + ": " + errorThrown);
+               error: function (xhr, textStatus, errorThrown) {
+                    var errorMessage = `${xhr.responseJSON.message}`;
+                    alert(`Error Message: ${errorMessage}`);
                }
           });
      })

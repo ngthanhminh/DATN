@@ -34,6 +34,14 @@ export class SubnetController {
           return this.subnetService.getSubnetInDepartment(departmentId);
      }
 
+     @Get('caculate')
+     async getCaculateSubnet(
+          @Query('subnet_mask') subnetMask: string,
+          @Query('network_address') networkAddress: string,
+     ): Promise<any> {
+          return this.subnetService.getCaculateSubnet(networkAddress, subnetMask);
+     }
+
      @Get('/:subnetId/ip')
      async getRandomIpInSubnet(
           @Param('subnetId') subnetId: number,

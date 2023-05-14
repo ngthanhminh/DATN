@@ -1,3 +1,4 @@
+import { SubnetService } from './../subnets/subnet.service';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateNetworkDto } from 'src/dtos/createNetwork.dto';
 import { UpdateNetworkDto } from 'src/dtos/updateNetwork.dto';
@@ -8,7 +9,10 @@ import { NetworkFeature } from 'src/utils/network.util';
 
 @Injectable()
 export class NetworkService {
-     constructor(private readonly networkRepository: NetworkRepository) { }
+     constructor(
+          private readonly networkRepository: NetworkRepository,
+          // private readonly subnetService: SubnetService,
+     ) { }
 
      // get all Network 
      async getAllNetworks(): Promise<Network[]> {
@@ -121,52 +125,49 @@ export class NetworkService {
           }
      }
 
-     // create Network 
-     async createNetwork(networkData: CreateNetworkDto): Promise<Partial<Network>> {
-          try {
-               networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
-               return await this.networkRepository.save(networkData);
+     // check network caculated subnet ?
+     async isCaculated(networkId: number): Promise<any> {
+          const network = await this.networkRepository.findOne({
+               where: { id: networkId },
+               relations: ['subnets']
+          })
+
+          if (network.subnets.length !== 0) {
+               const ipsNetwork = NetworkFeature.calculateNumIPAddresses(network.subnet_mask) + 2;
+               const ipCount = NetworkFeature.calculateNumIPAddresses(network.subnets[0].subnet_mask) + 2;
+               const numberSubnet = ipsNetwork / ipCount;
+               return { subnet_mask: network.subnets[0].subnet_mask, number_subnet: numberSubnet, subnets: network.subnets };
           }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(`Can't create Network`, HttpStatus.NOT_FOUND);
-          }
+          return {}
      }
 
+     // create Network 
+     async createNetwork(networkData: CreateNetworkDto): Promise<Partial<Network>> {
+          networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
+          return await this.networkRepository.save(networkData);
+     }
 
      // update Network
      async updateNetwork(networkId: number, networkData: UpdateNetworkDto): Promise<Partial<Network>> {
-          try {
-               const network = await this.networkRepository.findOne({ id: networkId })
-               if (network) {
-                    if (networkData.gateway || networkData.subnet_mask) {
-                         networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
-                    }
-                    await this.networkRepository.update(networkId, networkData);
-                    return this.networkRepository.findOne({ id: networkId })
+          const network = await this.networkRepository.findOne({ id: networkId })
+          if (network) {
+               if (networkData.gateway || networkData.subnet_mask) {
+                    networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
                }
-               throw new HttpException(`Can't update Network`, HttpStatus.BAD_REQUEST);
+               await this.networkRepository.update(networkId, networkData);
+               return this.networkRepository.findOne({ id: networkId })
           }
-          catch (error) {
-               console.log("Error: ", error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-          }
+          throw new HttpException(`Can't update Network`, HttpStatus.BAD_REQUEST);
      }
 
      // delete Network
      async deleteNetwork(networkId: number): Promise<Network> {
-          try {
-               const network = await this.networkRepository.findOne({ id: networkId });
-               if (network) {
-                    const networkD = await this.networkRepository.remove(network);
-                    return networkD;
-               }
-               throw new HttpException(`Can't delete Network`, HttpStatus.BAD_REQUEST);
+          const network = await this.networkRepository.findOne({ id: networkId });
+          if (network) {
+               const networkD = await this.networkRepository.remove(network);
+               return networkD;
           }
-          catch (error) {
-               console.log("Error: ", error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-          }
+          throw new HttpException(`Can't delete Network`, HttpStatus.BAD_REQUEST);
      }
 
 }

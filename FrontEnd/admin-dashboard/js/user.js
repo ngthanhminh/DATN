@@ -38,7 +38,7 @@ function createUser(name, username, password, address, email, phoneNumber) {
                LoadContent(users);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -75,7 +75,7 @@ function updateUser(id, name, username, password, address, email, phoneNumber) {
                LoadContent(users);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -98,7 +98,7 @@ function deleteuser(userContext, userId) {
                })
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -284,8 +284,9 @@ function search() {
                     success: function (data) {
                          LoadContent(data);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                         console.log(textStatus + ": " + errorThrown);
+                    error: function (xhr, textStatus, errorThrown) {
+                         var errorMessage = `${xhr.responseJSON.message}`;
+                         alert(`Error Message: ${errorMessage}`);
                     }
                });
           }
@@ -339,8 +340,9 @@ function LoadPage() {
                     search();
                })
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               // alert(`Error Message: ${errorMessage}`);
           }
      });
 

@@ -35,7 +35,7 @@ function createNetwork(name, networkAddress, subnetMask, gateway, decription) {
                LoadContent(networks);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -66,7 +66,7 @@ function updateNetwork(id, name, networkAddress, subnetMask, gateway, decription
                LoadContent(networks);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -89,7 +89,7 @@ function deleteNetwork(networkContext, networkId) {
                })
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });

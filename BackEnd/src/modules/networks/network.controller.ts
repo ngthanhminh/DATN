@@ -33,6 +33,14 @@ export class NetworkController {
           return this.networkService.searchNetwork(keysearch);
      }
 
+     @Get('/:id/caculate')
+     async isCaculated(
+          @Param('id') id: any,
+     ): Promise<any> {
+          console.log(id)
+          return this.networkService.isCaculated(id);
+     }
+
      @Get('/available')
      async getNetworksAvailable(
      ): Promise<Network[]> {

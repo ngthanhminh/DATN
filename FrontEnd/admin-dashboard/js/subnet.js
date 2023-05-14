@@ -5,6 +5,45 @@ var networks = [];
 var vlans = [];
 var category;
 
+// get list prefix are valid 
+function getValidSubnetMasks(networkAddress, subnetMask) {
+     const ipAddress = networkAddress.split('.').map(Number);
+     const subnet = subnetMask.split('.').map(Number);
+
+     let numOnes = 0;
+     for (let i = 0; i < subnet.length; i++) {
+          const binarySubnetOctet = subnet[i].toString(2);
+          numOnes += binarySubnetOctet.replace(/0/g, '').length;
+     }
+
+     const maxPrefixLength = 32;
+     const minPrefixLength = numOnes;
+
+     const prefixList = [];
+     for (let i = maxPrefixLength; i >= minPrefixLength; i--) {
+          prefixList.push(`${calculateSubnetMask(i)}/${i}`);
+     }
+
+     return prefixList;
+}
+
+// get subnet mask from prefix 
+function calculateSubnetMask(prefix) {
+     let subnetMask = "";
+     for (let i = 0; i < 32; i++) {
+          if (i < prefix) {
+               subnetMask += "1";
+          } else {
+               subnetMask += "0";
+          }
+     }
+     const octets = [];
+     for (let i = 0; i < 4; i++) {
+          octets.push(parseInt(subnetMask.slice(i * 8, (i + 1) * 8), 2));
+     }
+     return octets.join(".");
+}
+
 // get all departments
 $.ajax({
      url: "http://localhost:3000/department/",
@@ -13,8 +52,9 @@ $.ajax({
      success: function (data) {
           departments = data;
      },
-     error: function (jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ": " + errorThrown);
+     error: function (xhr, textStatus, errorThrown) {
+          var errorMessage = `${xhr.responseJSON.message}`;
+          alert(`Error Message: ${errorMessage}`);
      }
 });
 
@@ -27,8 +67,9 @@ $.ajax({
      success: function (data) {
           networks = data;
      },
-     error: function (jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ": " + errorThrown);
+     error: function (xhr, textStatus, errorThrown) {
+          var errorMessage = `${xhr.responseJSON.message}`;
+          alert(`Error Message: ${errorMessage}`);
      }
 });
 
@@ -41,15 +82,37 @@ $.ajax({
      success: function (data) {
           vlans = data;
      },
-     error: function (jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ": " + errorThrown);
+     error: function (xhr, textStatus, errorThrown) {
+          var errorMessage = `${xhr.responseJSON.message}`;
+          alert(`Error Message: ${errorMessage}`);
      }
 });
 
 
+function CaculateSubnet(ipNetwork, subnet_mask) {
+     $.ajax({
+          url: `http://localhost:3000/subnet/caculate/?subnet_mask=${subnet_mask}&network_address=${ipNetwork}`,
+          type: "GET",
+          dataType: "json",
+          success: function (data) {
+               let iframe = $("#iframe-container-create > #user-form-iframe").contents().get(0);
+               $(iframe).find('#subnetAddress').empty();
+               data.forEach((val, ind) => {
+                    const option = $(`<option value="${ind}">${val.subnet_address}</option>`);
+                    $(iframe).find('#subnetAddress').append(option);
+               })
+               $(iframe).find('select#subnetAddress').prop('selectedIndex', -1);
+          },
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
+          }
+     });
+}
+
 // load message 
 function LoadMessage(message) {
-     let iframe = $("#iframe-container-create > #user-form-iframe").contents().get(0)
+     let iframe = $("#iframe-container-create > #user-form-iframe").contents().get(0);
      let createForm = $(iframe).find('form#create-form')
 
      // add header content
@@ -82,7 +145,7 @@ function createSubnet(name, subnetAddress, subnetMask, decription, permission, d
                LoadContent(subnets);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -116,7 +179,7 @@ function updateSubnet(id, name, subnetAddress, subnetMask, decription, permissio
                LoadContent(subnets);
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -139,7 +202,7 @@ function deletesubnet(subnetContext, subnetId) {
                })
           },
           error: function (xhr, textStatus, errorThrown) {
-               var errorMessage = `${xhr.responseJSON.statusCode} - ${xhr.responseJSON.message}`;
+               var errorMessage = `${xhr.responseJSON.message}`;
                alert(`Error Message: ${errorMessage}`);
           }
      });
@@ -161,12 +224,29 @@ function loadFormCreate() {
                          <input type="text" name="name" id="name" placeholder="Enter subnet name" />
                     </div>
                     <div class="flex-column">
-                         <h3>Subnet Address</h3>
-                         <input type="text" name="subnetAddress" id="subnetAddress" placeholder="Enter subnet address" />
+                         <h3>Department</h3>
+                         <select id="department">
+                         </select>
+                    </div>
+                    <div class="flex-column">
+                         <h3>VLAN</h3>
+                         <select id="vlan">
+                         </select>
+                    </div>
+                    <div class="flex-column">
+                         <h3>Network</h3>
+                         <select id="network">
+                         </select>
                     </div>
                     <div class="flex-column">
                          <h3>Subnet Mask</h3>
-                         <input type="text" name="subnetMask" id="subnetMask" placeholder="Enter subnet mask" />
+                         <select id="subnetMask">
+                         </select>
+                    </div>
+                    <div class="flex-column">
+                         <h3>Subnet Address</h3>
+                         <select id="subnetAddress">
+                         </select>
                     </div>
                     <div class="flex-column">
                          <h3>Permission</h3>
@@ -179,21 +259,6 @@ function loadFormCreate() {
                          <h3>Decription</h3>
                          <input type="text" name="decription" id="decription" placeholder="Enter decription" />
                     </div>
-                    <div class="flex-column">
-                         <h3>Department</h3>
-                         <select id="department">
-                         </select>
-                    </div>
-                    <div class="flex-column">
-                         <h3>Network</h3>
-                         <select id="network">
-                         </select>
-                    </div>
-                    <div class="flex-column">
-                         <h3>VLAN</h3>
-                         <select id="vlan">
-                         </select>
-                    </div>
                     <div class="flex" id="btn">
                          <button class="primary" name="submit" id="submit">
                               Submit
@@ -203,21 +268,66 @@ function loadFormCreate() {
      departments.forEach((department, index) => {
           $(iframe).find('select#department').append(`<option value="${department.id}">${department.name}</option>`)
      })
+     $(iframe).find('select#department').prop('selectedIndex', -1);
 
      networks.forEach((network, index) => {
-          $(iframe).find('select#network').append(`<option value="${network.id}">${network.name}</option>`)
+          $(iframe).find('select#network').append(`<option value="${network.id}">${network.network_address}</option>`)
      })
+     $(iframe).find('select#network').prop('selectedIndex', -1);
 
      vlans.forEach((vlan, index) => {
           $(iframe).find('select#vlan').append(`<option value="${vlan.id}">${vlan.name}</option>`)
      })
+     $(iframe).find('select#vlan').prop('selectedIndex', -1);
 
+     $(iframe).find('#network').change(function () {
+          const networkAddress = $(this).find(':selected').text();
+          const network = networks.find((network) => { return network.network_address == networkAddress });
+
+          const subnets = getValidSubnetMasks(network.network_address, network.subnet_mask);
+          $(iframe).find('select#subnetMask').empty();
+          subnets.forEach((subnetMask, index) => {
+               $(iframe).find('select#subnetMask').append(`<option value="${index}">${subnetMask}</option>`)
+          })
+
+          $.ajax({
+               url: `http://localhost:3000/network/${network.id}/caculate`,
+               type: "GET",
+               dataType: "json",
+               success: function (data) {
+                    if (data.subnets) {
+                         $(iframe).find('#subnetMask').find('option').filter(function () {
+                              return $(this).text().split('/')[0] === data.subnet_mask;
+                         }).prop('selected', true);
+
+                         $(iframe).find('#subnetMask').prop('disabled', true);
+                         CaculateSubnet(network.network_address, data.subnet_mask);
+                    }
+                    else {
+                         $(iframe).find('#subnetMask').prop('disabled', false);
+
+                         $(iframe).find('#subnetMask').change(function () {
+                              $(iframe).find('#subnetAddress').empty();
+                              const subnetMask = $(iframe).find('#subnetMask').find(':selected').text().split('/')[0];
+                              CaculateSubnet(network.network_address, subnetMask);
+                         })
+                    }
+               },
+               error: function (xhr, textStatus, errorThrown) {
+                    var errorMessage = `${xhr.responseJSON.message}`;
+                    alert(`Error Message: ${errorMessage}`);
+               }
+          });
+          // const listSubnets = getValidPrefixes(network.network_address, network.subnet_mask);
+
+
+     });
      // add event create subnet
      $(iframe).find('#submit').click(function (event) {
           event.preventDefault();
           const name = $(iframe).find('#name').val();
-          const subnetAddress = $(iframe).find('#subnetAddress').val();
-          const subnetMask = $(iframe).find('#subnetMask').val();
+          const subnetAddress = $(iframe).find('#subnetAddress').find(':selected').text();
+          const subnetMask = $(iframe).find('#subnetMask').find(':selected').text().split('/')[0];
           const decription = $(iframe).find('#decription').val();
           const permission = $(iframe).find('#permission').find(':selected').text();
           const deparmentId = $(iframe).find('#department').find(':selected').val();
@@ -401,8 +511,9 @@ function search() {
                     success: function (data) {
                          LoadContent(data);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                         console.log(textStatus + ": " + errorThrown);
+                    error: function (xhr, textStatus, errorThrown) {
+                         var errorMessage = `${xhr.responseJSON.message}`;
+                         alert(`Error Message: ${errorMessage}`);
                     }
                });
           }
@@ -458,8 +569,9 @@ function LoadPage() {
                     search();
                })
           },
-          error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+          error: function (xhr, textStatus, errorThrown) {
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 

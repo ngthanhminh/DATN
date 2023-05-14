@@ -58,48 +58,48 @@ export class SubnetService {
 
      // get a Subnet with Id
      async getSubnetById(subnetId: number): Promise<Subnet> {
-          try {
-               const subnet = await this.subnetRepository.findOne({
-                    where: {
-                         id: subnetId,
-                    },
-                    relations: ['devices'],
-               });
-               if (!subnet) {
-                    throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
-               }
-               return subnet;
+          const subnet = await this.subnetRepository.findOne({
+               where: {
+                    id: subnetId,
+               },
+               relations: ['devices'],
+          });
+          if (!subnet) {
+               throw new HttpException(`Subnet does not exist`, HttpStatus.NOT_FOUND);
           }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(`Not Found`, HttpStatus.NOT_FOUND);
-          }
+          return subnet;
      }
 
      // create Subnet 
      async createSubnet(subnetData: CreateSubnetDto): Promise<Subnet> {
-          try {
-               const subnet = await this.subnetRepository.findOne({
+          const network = await this.networkService.getNetworkById(subnetData.network_id);
+          const networkFeature = new NetworkFeature();
+          const ips = networkFeature.generateIPRange(network.network_address, network.subnet_mask);
+          if (Number(subnetData.subnet_address.split('/')[1]) !== NetworkFeature.subnetMaskToPrefix(subnetData.subnet_mask)) {
+               throw new HttpException(`Prefix of subnet address is not invalid`, HttpStatus.BAD_REQUEST);
+          }
+          if (!ips.includes(NetworkFeature.getHostAddress(subnetData.subnet_address))) {
+               throw new HttpException(`Subnet address is not invalid`, HttpStatus.BAD_REQUEST);
+          }
+          if (!NetworkFeature.isValidCIDR(subnetData.subnet_address)) {
+               throw new HttpException(`Subnet address is not invalid`, HttpStatus.BAD_REQUEST);
+          }
+          const subnet = await this.subnetRepository.findOne({
+               where: {
+                    name: subnetData.name,
+                    subnet_address: subnetData.subnet_address,
+               }
+          });
+
+          if (!subnet) {
+               await this.subnetRepository.insert(subnetData);
+               return this.subnetRepository.findOne({
                     where: {
                          name: subnetData.name,
                          subnet_address: subnetData.subnet_address,
-                    }
-               });
-               if (!subnet) {
-                    await this.subnetRepository.insert(subnetData);
-                    return this.subnetRepository.findOne({
-                         where: {
-                              name: subnetData.name,
-                              subnet_address: subnetData.subnet_address,
-                         },
-                         relations: ['department', 'vlan', 'network'],
-                    })
-               }
-               throw new HttpException(`Can't create Department, Department already exists`, HttpStatus.BAD_REQUEST);
-          }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                    },
+                    relations: ['department', 'vlan', 'network'],
+               })
           }
      }
 
@@ -203,19 +203,13 @@ export class SubnetService {
 
      // get all ipaddress in a subnet
      async getIPAddressSubnet(subnetId: number): Promise<any> {
-          try {
-               const subnet = await this.getSubnetById(subnetId);
-               if (subnet) {
-                    const networkFeature = new NetworkFeature();
-                    const ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
-                    return ips;
-               }
-               throw new HttpException(`Subnet or Network does not exist`, HttpStatus.NOT_FOUND);
+          const subnet = await this.getSubnetById(subnetId);
+          if (subnet) {
+               const networkFeature = new NetworkFeature();
+               const ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
+               return ips;
           }
-          catch (error) {
-               console.log(error);
-               return error;
-          }
+          throw new HttpException(`Subnet or Network does not exist`, HttpStatus.NOT_FOUND);
      }
 
      // get all ipaddress in a subnet
@@ -287,6 +281,42 @@ export class SubnetService {
                     }
 
                     return this.subnetRepository.save(subnetsArr);
+               }
+               throw new HttpException(`Can't calculate subnet`, HttpStatus.BAD_REQUEST);
+          }
+          catch (error) {
+               console.log("Error: ", error);
+               return error;
+          }
+     }
+
+     // get calculate subnet 
+     async getCaculateSubnet(networkAddress: string, subnetMask: string): Promise<any> {
+          try {
+               const net = await this.networkService.getNetworkByAddress(networkAddress);
+               if (net) {
+                    // Tính số địa chỉ IP từ địa chỉ mạng
+                    const numIpAddress = NetworkFeature.calcNumOfIPAddresses(networkAddress, net.subnet_mask);
+                    const octets = networkAddress.split('.');
+                    const prefixLength = NetworkFeature.subnetMaskToPrefix(subnetMask);
+                    const subnetsArr = [];
+                    const size = numIpAddress / (NetworkFeature.calculateNumIPAddresses(subnetMask) + 2);
+
+                    for (let i = 0; i < size; i++) {
+                         const subnetOctet = i * (numIpAddress / size);
+                         const subnetAddress = ((parseInt(octets[0]) << 24) | (parseInt(octets[1]) << 16) | (parseInt(octets[2]) << 8) | subnetOctet) >>> 0;
+                         const subnet_address = `${subnetAddress >>> 24}.${(subnetAddress >> 16) & 255}.${(subnetAddress >> 8) & 255}.${subnetAddress & 255}/${prefixLength}`;
+
+                         const subnet = new Subnet();
+                         subnet.network_id = net.id;
+                         subnet.subnet_address = subnet_address;
+                         subnet.subnet_mask = subnetMask;
+                         subnet.permission = 'ACCESS';
+
+                         subnetsArr.push(subnet);
+                    }
+
+                    return subnetsArr;
                }
                throw new HttpException(`Can't calculate subnet`, HttpStatus.BAD_REQUEST);
           }

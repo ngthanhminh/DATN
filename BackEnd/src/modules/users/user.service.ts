@@ -93,63 +93,46 @@ export class UserService {
 
   // create user 
   async createUser(userData: CreateUserDto): Promise<Partial<User>> {
-    try {
-      const user = await this.userRepository.findOne({
-        where: {
-          name: userData.username,
-        }
-      });
-      if (!user) {
-        userData.password = PasswordFeature.HashPassWord(userData.password);
-        await this.userRepository.insert(userData);
-        return this.userRepository.findOne({
-          where: {
-            username: userData.username,
-          },
-        })
+    const user = await this.userRepository.findOne({
+      where: {
+        name: userData.username,
       }
-      throw new HttpException(`Can't create user, Department already exists`, HttpStatus.BAD_REQUEST);
+    });
+    if (!user) {
+      userData.password = PasswordFeature.HashPassWord(userData.password);
+      await this.userRepository.insert(userData);
+      return this.userRepository.findOne({
+        where: {
+          username: userData.username,
+        },
+      })
     }
-    catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+    throw new HttpException(`Can't create user, Department already exists`, HttpStatus.BAD_REQUEST);
   }
 
 
   // update user
   async updateUser(userId: number, userData: UpdateUserDto): Promise<Partial<User>> {
-    try {
-      const user = await this.userRepository.findOne({ id: userId })
-      if (user) {
-        if (userData.password && PasswordFeature.ComparePassword(userData.password, user.password)) {
-          await PasswordFeature.HashPassWord(userData.password);
-        }
-        await this.userRepository.update(userId, userData);
-        const userReturn = await this.userRepository.findOne({ id: userId })
-        userReturn.password = undefined;
-        return userReturn;
+    const user = await this.userRepository.findOne({ id: userId })
+    if (user) {
+      if (userData.password && PasswordFeature.ComparePassword(userData.password, user.password)) {
+        await PasswordFeature.HashPassWord(userData.password);
       }
-      throw new HttpException(`Can't update user`, HttpStatus.BAD_REQUEST);
+      await this.userRepository.update(userId, userData);
+      const userReturn = await this.userRepository.findOne({ id: userId })
+      userReturn.password = undefined;
+      return userReturn;
     }
-    catch (error) {
-      console.log("Error: ", error);
-      return error;
-    }
+    throw new HttpException(`Can't update user`, HttpStatus.BAD_REQUEST);
   }
 
   // delete user
   async deleteUser(userId: number): Promise<User> {
-    try {
-      const user = await this.userRepository.findOne({ id: userId });
-      if (user) {
-        const userD = await this.userRepository.softRemove(user);
-        return userD;
-      }
-      throw new HttpException(`Can't delete user`, HttpStatus.BAD_REQUEST);
+    const user = await this.userRepository.findOne({ id: userId });
+    if (user) {
+      const userD = await this.userRepository.softRemove(user);
+      return userD;
     }
-    catch (error) {
-      console.log("Error: ", error);
-    }
+    throw new HttpException(`Can't delete user`, HttpStatus.BAD_REQUEST);
   }
 }
