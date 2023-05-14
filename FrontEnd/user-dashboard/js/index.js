@@ -226,7 +226,7 @@ $(function () {
 
           // check ip address variable
           if (toolName == 'checkIP') {
-               LoadFormCheckIP();
+               LoadFormCheckIP(departments);
                $('#iframe-container-create').fadeIn();
 
                // add event close form

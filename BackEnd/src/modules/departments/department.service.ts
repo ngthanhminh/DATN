@@ -132,67 +132,48 @@ export class DepartmentService {
 
      // create Department 
      async createDepartment(departmentData: CreateDepartmentDto): Promise<Department> {
-          try {
-               const department = await this.departmentRepository.findOne({
+          const department = await this.departmentRepository.findOne({
+               where: {
+                    name: departmentData.name,
+                    location: departmentData.location,
+               }
+          });
+          if (!department) {
+               await this.departmentRepository.insert(departmentData);
+               return this.departmentRepository.findOne({
                     where: {
                          name: departmentData.name,
                          location: departmentData.location,
-                    }
-               });
-               if (!department) {
-                    await this.departmentRepository.insert(departmentData);
-                    return this.departmentRepository.findOne({
-                         where: {
-                              name: departmentData.name,
-                              location: departmentData.location,
-                         },
-                         relations: ['user', 'devices'],
-                    })
-               }
-               throw new HttpException(`Can't create Department, Department already exists`, HttpStatus.BAD_REQUEST);
+                    },
+                    relations: ['user', 'devices'],
+               })
           }
-          catch (error) {
-               console.log(error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-          }
+          throw new HttpException(`Can't create Department, Department already exists`, HttpStatus.BAD_REQUEST);
      }
 
      // update Department with id
      async updateDepartment(departmentId: number, departmentData: UpdateDepartmentDto): Promise<Department> {
-          try {
-               const Department = await this.departmentRepository.findOne({ where: { id: departmentId } })
-               if (Department) {
-                    await this.departmentRepository.update(departmentId, departmentData);
-                    return this.departmentRepository.findOne({
-                         where: {
-                              id: departmentId,
-                         },
-                         relations: ['user', 'devices'],
-                    });
-               }
-               throw new HttpException(`Can't update Department`, HttpStatus.BAD_REQUEST);
+          const Department = await this.departmentRepository.findOne({ where: { id: departmentId } })
+          if (Department) {
+               await this.departmentRepository.update(departmentId, departmentData);
+               return this.departmentRepository.findOne({
+                    where: {
+                         id: departmentId,
+                    },
+                    relations: ['user', 'devices'],
+               });
           }
-          catch (error) {
-               console.log("Error: ", error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-          }
+          throw new HttpException(`Can't update Department`, HttpStatus.BAD_REQUEST);
      }
 
      // delete Department
      async deleteDepartment(departmentId: number): Promise<Department> {
-          try {
-               const department = await this.departmentRepository.findOne({ id: departmentId });
-               if (department) {
-                    const departmentD = await this.departmentRepository.remove(department);
-                    return departmentD;
-               }
-               throw new HttpException(`Can't delete Department`, HttpStatus.BAD_REQUEST);
+          const department = await this.departmentRepository.findOne({ id: departmentId });
+          if (department) {
+               const departmentD = await this.departmentRepository.remove(department);
+               return departmentD;
           }
-          catch (error) {
-               console.log("Error: ", error);
-               throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-          }
+          throw new HttpException(`Can't delete Department`, HttpStatus.BAD_REQUEST);
      }
-
 
 }

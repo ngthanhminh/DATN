@@ -7,11 +7,16 @@ function getSubnetInNetwork(networkId, subnetsManage) {
           url: `http://localhost:3000/subnet/all/network/${networkId}`,
           type: "GET",
           dataType: "json",
+          headers: {
+               'Authorization': `Bearer ${getCookieValue('access_token')}`,
+               'Content-Type': 'application/json'
+          },
           success: function (data) {
                LoadSubnetsTableOfNetwork(data, subnetsManage);
           },
           error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }

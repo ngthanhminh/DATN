@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { SubnetController } from './subnet.controller';
 import { SubnetService } from './subnet.service';
 import { TypeOrmModule } from '@nestjs/typeorm';

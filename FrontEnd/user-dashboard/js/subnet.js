@@ -11,7 +11,8 @@ function getSubnetById(subnetId) {
                LoadSubnet(data);
           },
           error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }
@@ -28,7 +29,8 @@ function getDevicesInDepartment(departmentId, subnetId) {
                getIpsInSubnet(subnetId, data[0].devices);
           },
           error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }
@@ -44,7 +46,8 @@ function getIpsInSubnet(subnetId, devices) {
                LoadIpAddressTable(data, devices, subnetId);
           },
           error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }

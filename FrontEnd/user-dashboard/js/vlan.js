@@ -11,7 +11,8 @@ function getSubnetInVlan(vlanId, subnetsManage) {
                LoadSubnetsTableOfVlan(data, subnetsManage);
           },
           error: function (jqXHR, textStatus, errorThrown) {
-               console.log(textStatus + ": " + errorThrown);
+               var errorMessage = `${xhr.responseJSON.message}`;
+               alert(`Error Message: ${errorMessage}`);
           }
      });
 }
