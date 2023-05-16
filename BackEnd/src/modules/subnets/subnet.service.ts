@@ -206,7 +206,8 @@ export class SubnetService {
           const subnet = await this.getSubnetById(subnetId);
           if (subnet) {
                const networkFeature = new NetworkFeature();
-               const ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
+               let ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
+               ips.shift();
                return ips;
           }
           throw new HttpException(`Subnet or Network does not exist`, HttpStatus.NOT_FOUND);
