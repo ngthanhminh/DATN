@@ -254,6 +254,7 @@ export class NetworkFeature {
                ipAddresses.push(this.numToIpV4(i));
           }
 
+          console.log(ipAddresses);
           return ipAddresses;
      }
 
