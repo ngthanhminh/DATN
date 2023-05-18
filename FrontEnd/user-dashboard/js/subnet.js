@@ -62,11 +62,11 @@ function LoadSubnet(subnet) {
      `);
 
      $('.detail').append(`
-          <p><strong>Name: </strong>${subnet.name}</ >
+          <p><strong>Name: </strong>${subnet?.name || ''}</ >
           <p><strong>Subnet address: </strong>${subnet.subnet_address}</p>
           <p><strong>Subnet mask: </strong>${subnet.subnet_mask}</p>
           <p><strong>Devices: </strong>${subnet.devices.length}</p>    
-          <p><strong>Decription: </strong>${subnet.decription}</p>
+          <p><strong>Decription: </strong>${subnet?.decription || ''}</p>
      `)
 
      getDevicesInDepartment(subnet.department_id, subnet.id);

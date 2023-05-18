@@ -46,6 +46,7 @@ export class department1679908365696 implements MigrationInterface {
                     {
                         name: "user_id",
                         type: "int",
+                        isNullable: true,
                     }
                 ]
             }),

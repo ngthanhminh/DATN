@@ -131,9 +131,9 @@ function loadFormUpdate(user) {
 function LoadContent(user) {
      $('#name').text(`${user.name}`);
      $('#username').text(`${user.username}`);
-     $('#address').text(`${user.address}`);
-     $('#email').text(`${user.email}`);
-     $('#phoneNumber').text(`${user.phone_number}`);
+     $('#address').text(`${user?.address || ''}`);
+     $('#email').text(`${user?.email || ''}`);
+     $('#phoneNumber').text(`${user?.phone_number || ''}`);
 
 
      // add event edit 

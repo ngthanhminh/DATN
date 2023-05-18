@@ -227,7 +227,7 @@ function LoadContent(data) {
                                    <tr>
                                         <td>${department.name}</td>
                                         <td><span class="fas fa-check-circle"></span>${department.location}</td>
-                                        <td>${department.user.name}</td>
+                                        <td>${department?.user?.name || ''}</td>
                                         <td>${department.devices.length}</td>
                                         <td><a class="btn-white edit-department" id="" href="#">Edit</a> <a class="btn-red del-department" id="" href="#">Delete</a></td>
                                     </tr>
@@ -239,7 +239,7 @@ function LoadContent(data) {
           let name = $(this).parent().siblings().eq(0).text();
           const department = departments.find((department) => { return department.name == name })
 
-          loadFormUpdate(department.id, department.name, department.location, department.user.name);
+          loadFormUpdate(department.id, department.name, department.location, department?.user?.name || '');
 
           $('#iframe-container-create').fadeIn();
           $('#iframe-container-detail #close-iframe-btn').click(function () {

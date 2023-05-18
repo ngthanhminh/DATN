@@ -78,22 +78,22 @@ function LoadSubnetsTableOfNetwork(subnets, subnetsManage) {
           if (manage) {
                $('.table-striped tbody').append(`
                     <tr>
-                         <td>${subnet.name}</td>
+                         <td>${subnet?.name || 'Subnet'}</td>
                          <td><a class="subnet" href="#">${subnet.subnet_address}</a></td>
                          <td>${subnet.subnet_mask}</td>
                          <td>${subnet.permission}</td>
-                         <td>${subnet.decription}</td>
+                         <td>${subnet?.decription || 'None'}</td>
                     </tr>
                `)
           }
           else {
                $('.table-striped tbody').append(`
                     <tr>
-                         <td>${subnet.name}</td>
+                         <td>${subnet?.name || 'Subnet'}</td>
                          <td>${subnet.subnet_address}</td>
                          <td>${subnet.subnet_mask}</td>
                          <td>${subnet.permission}</td>
-                         <td>${subnet.decription}</td>
+                         <td>${subnet?.decription || 'None'}</td>
                     </tr>
                `)
           }

@@ -162,13 +162,13 @@ $(function () {
           subnets.forEach((subnet, ind) => {
                $('.table-striped tbody').append(`
                     <tr>
-                         <td>${subnet.name}</td>
+                         <td>${subnet?.name || 'Subnet'}</td>
                          <td><a class="subnet" href="#">${subnet.subnet_address}</a></td>
                          <td>${subnet.subnet_mask}</td>
                          <td><a class="network" href="#">${subnet?.network?.network_address || ''}</a></td>
                          <td><a class="vlan" href="#">${subnet?.vlan?.name || ''}</a></td>
                          <td>${subnet.permission}</td>
-                         <td>${subnet.decription}</td>
+                         <td>${subnet?.decription || 'None'}</td>
                     </tr>
                `)
           })

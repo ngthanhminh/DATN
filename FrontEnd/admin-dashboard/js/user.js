@@ -238,7 +238,7 @@ function LoadContent(data) {
                                    <tr>
                                         <td>${user.name}</td>
                                         <td>${user.username}</td>
-                                        <td>${user.address}</td>
+                                        <td>${user?.address || ''}</td>
                                         <td>${user.created_at}</td>
                                         <td><a class="btn-white edit-user" id="" href="#">Edit</a> <a class="btn-red del-user" id="" href="#">Delete</a></td>
                                     </tr>

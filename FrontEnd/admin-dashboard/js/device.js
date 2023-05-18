@@ -217,6 +217,7 @@ function loadFormCreate() {
           subnetsInDepartment.forEach((subnet, index) => {
                $(iframe).find('select#subnet').append(`<option value="${subnet.id}">${subnet.subnet_address}</option>`)
           })
+          $(iframe).find('select#subnet').prop("selectedIndex", -1);
      })
 
      // add event update device
@@ -364,7 +365,7 @@ function LoadContent(data) {
           $(`.pages-table-${category} tbody`).append(`
                                    <tr>
                                         <td>${device.name}</td>
-                                        <td><span class="fas fa-check-circle"></span>${device.ip_address}</td>
+                                        <td><span class="fas fa-check-circle"></span>${device?.ip_address || ''}</td>
                                         <td>${device.mac_address}</td>
                                         <td>${device.device_type}</td>
                                         <td><a class="btn-white edit-device" id="" href="#">Edit</a> <a class="btn-red del-device" id="" href="#">Delete</a></td>

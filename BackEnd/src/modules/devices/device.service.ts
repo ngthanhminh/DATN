@@ -100,19 +100,32 @@ export class DeviceService {
 
      // create Device 
      async createDevice(deviceData: CreateDeviceDto): Promise<Device> {
-          const subnet = await this.subnetService.getSubnetById(deviceData.subnet_id);
-          const networkFeature = new NetworkFeature();
-          const ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
-          if (!ips.includes(deviceData.ip_address)) {
-               throw new HttpException(`Ip address is not invalid`, HttpStatus.BAD_REQUEST);
-          }
-          const device = await this.deviceRepository.findOne({
-               where: {
-                    ip_address: deviceData.ip_address,
-                    mac_address: deviceData.mac_address,
+          if (deviceData.ip_address) {
+               const subnet = await this.subnetService.getSubnetById(deviceData.subnet_id);
+               const networkFeature = new NetworkFeature();
+               const ips = networkFeature.generateIPRange(NetworkFeature.getHostAddress(subnet.subnet_address), subnet.subnet_mask);
+               if (!ips.includes(deviceData.ip_address)) {
+                    throw new HttpException(`Ip address is not invalid`, HttpStatus.BAD_REQUEST);
                }
-          });
-          if (!device) {
+               const device = await this.deviceRepository.findOne({
+                    where: {
+                         ip_address: deviceData.ip_address,
+                         mac_address: deviceData.mac_address,
+                    }
+               });
+               if (!device) {
+                    await this.deviceRepository.insert(deviceData);
+                    return this.deviceRepository.findOne({
+                         where: {
+                              ip_address: deviceData.ip_address,
+                              mac_address: deviceData.mac_address,
+                         },
+                         relations: ['department', 'subnet'],
+                    })
+               }
+               throw new HttpException(`Can't create device, device already exists`, HttpStatus.BAD_REQUEST);
+          }
+          else {
                await this.deviceRepository.insert(deviceData);
                return this.deviceRepository.findOne({
                     where: {
@@ -122,7 +135,6 @@ export class DeviceService {
                     relations: ['department', 'subnet'],
                })
           }
-          throw new HttpException(`Can't create device, device already exists`, HttpStatus.BAD_REQUEST);
      }
 
      // update Device

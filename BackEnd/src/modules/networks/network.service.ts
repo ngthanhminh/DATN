@@ -143,6 +143,14 @@ export class NetworkService {
 
      // create Network 
      async createNetwork(networkData: CreateNetworkDto): Promise<Partial<Network>> {
+          const network = await this.networkRepository.find({
+               where: {
+                    network_address: networkData.network_address
+               }
+          });
+          if (network.length !== 0) {
+               throw new HttpException(`Network existed !`, HttpStatus.BAD_REQUEST);
+          }
           networkData.network_address = NetworkFeature.calculateNetworkAddress(networkData.gateway, networkData.subnet_mask);
           return await this.networkRepository.save(networkData);
      }
