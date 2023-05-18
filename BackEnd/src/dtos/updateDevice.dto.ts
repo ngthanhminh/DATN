@@ -14,9 +14,6 @@ export class UpdateDeviceDto extends CreateDeviceDto {
      name: string;
 
      @IsOptional()
-     ip_address: string;
-
-     @IsOptional()
      mac_address: string;
 
      @IsOptional()
@@ -24,8 +21,5 @@ export class UpdateDeviceDto extends CreateDeviceDto {
 
      @IsOptional()
      department_id: number;
-
-     @IsOptional()
-     subnet_id: number;
 
 }

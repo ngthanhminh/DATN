@@ -26,6 +26,7 @@ export class device1679908366897 implements MigrationInterface {
                     {
                         name: "ip_address",
                         type: "nvarchar",
+                        isNullable: true,
                     },
                     {
                         name: "mac_address",
@@ -63,6 +64,7 @@ export class device1679908366897 implements MigrationInterface {
                     {
                         name: "subnet_id",
                         type: "int",
+                        isNullable: true,
                     },
                 ]
             }),

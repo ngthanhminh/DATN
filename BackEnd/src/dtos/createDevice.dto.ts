@@ -15,7 +15,7 @@ export class CreateDeviceDto {
      @IsOptional()
      decription: string;
 
-     @IsNotEmpty()
+     @IsOptional()
      ip_address: string;
 
      @IsNotEmpty()
@@ -28,7 +28,7 @@ export class CreateDeviceDto {
      @IsNumberString()
      department_id: number;
 
-     @IsNumberString()
+     @IsOptional()
      subnet_id: number;
 
 }
